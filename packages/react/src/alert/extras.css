@@ -1,0 +1,396 @@
+/* m3x extras: Select/ComboBox, SelectionCard, Avatar, alerts, toasts.
+   Beyond the M3 catalog; styled entirely with M3 + extended (--m3x-color-*)
+   tokens so they follow the active theme. */
+
+/* ---- select / combobox --------------------------------------------------- */
+.m3x-select,
+.m3x-combobox {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 210px;
+}
+
+.m3x-select__trigger {
+  cursor: pointer;
+  text-align: start;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.m3x-select__value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+}
+
+.m3x-select__placeholder {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3x-select__arrow {
+  color: var(--md-sys-color-on-surface-variant);
+  transition: transform var(--md-sys-motion-duration-short3)
+    var(--md-sys-motion-easing-standard);
+}
+
+.m3x-select__arrow[data-open] {
+  transform: rotate(180deg);
+}
+
+.m3x-select__list {
+  position: absolute;
+  top: calc(100% + 4px);
+  inset-inline: 0;
+  z-index: 25;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  max-height: 300px;
+  overflow-y: auto;
+  background: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level2);
+  animation: m3x-menu-in var(--md-sys-motion-duration-medium1)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-select__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 12px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+}
+
+.m3x-select__option[data-active] {
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-state-layer-opacity) * 100%),
+    transparent
+  );
+}
+
+.m3x-select__option[aria-selected='true'] {
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-select__option[aria-disabled] {
+  cursor: default;
+  opacity: 0.38;
+}
+
+.m3x-select__option-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.m3x-combobox__empty {
+  padding: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+/* ---- selection card ------------------------------------------------------ */
+.m3x-selection-card {
+  display: inline-flex;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m3x-selection-card[data-disabled] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.m3x-selection-card__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.m3x-selection-card__surface {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  min-width: 200px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface);
+  transition:
+    border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-selection-card__input:focus-visible + .m3x-selection-card__surface {
+  outline: 3px solid var(--md-sys-color-secondary);
+  outline-offset: 2px;
+}
+
+.m3x-selection-card__input:checked + .m3x-selection-card__surface {
+  border-color: var(--md-sys-color-primary);
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.m3x-selection-card__icon {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3x-selection-card__input:checked + .m3x-selection-card__surface .m3x-selection-card__icon {
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-selection-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.m3x-selection-card__title {
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+}
+
+.m3x-selection-card__description {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.m3x-selection-card__check {
+  color: transparent;
+  transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-selection-card__input:checked + .m3x-selection-card__surface .m3x-selection-card__check {
+  color: var(--md-sys-color-primary);
+}
+
+/* ---- avatar -------------------------------------------------------------- */
+.m3x-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-weight: 500;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.m3x-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---- alerts (banner + inline) ------------------------------------------- */
+.m3x-banner,
+.m3x-inline-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.m3x-banner {
+  padding: 12px 8px 12px 16px;
+  background: var(--m3x-alert-container);
+  color: var(--m3x-alert-on-container);
+}
+
+.m3x-inline-alert {
+  padding: 12px 8px 12px 16px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--m3x-alert-container);
+  color: var(--m3x-alert-on-container);
+  border-inline-start: 4px solid var(--m3x-alert-accent);
+}
+
+.m3x-alert--info {
+  --m3x-alert-container: var(--m3x-color-info-container);
+  --m3x-alert-on-container: var(--m3x-color-on-info-container);
+  --m3x-alert-accent: var(--m3x-color-info);
+}
+
+.m3x-alert--success {
+  --m3x-alert-container: var(--m3x-color-success-container);
+  --m3x-alert-on-container: var(--m3x-color-on-success-container);
+  --m3x-alert-accent: var(--m3x-color-success);
+}
+
+.m3x-alert--warning {
+  --m3x-alert-container: var(--m3x-color-warning-container);
+  --m3x-alert-on-container: var(--m3x-color-on-warning-container);
+  --m3x-alert-accent: var(--m3x-color-warning);
+}
+
+.m3x-alert--error {
+  --m3x-alert-container: var(--md-sys-color-error-container);
+  --m3x-alert-on-container: var(--md-sys-color-on-error-container);
+  --m3x-alert-accent: var(--md-sys-color-error);
+}
+
+.m3x-alert__icon {
+  color: var(--m3x-alert-accent);
+  margin-top: 2px;
+}
+
+.m3x-alert__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-block: 2px;
+}
+
+.m3x-alert__title {
+  font-family: var(--md-sys-typescale-title-small-font);
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: var(--md-sys-typescale-title-small-weight);
+}
+
+.m3x-alert__message {
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.m3x-alert__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  margin-inline-start: -12px;
+}
+
+/* ---- toasts -------------------------------------------------------------- */
+.m3x-toast-region {
+  position: fixed;
+  bottom: 16px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.m3x-toast-region--bottom {
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.m3x-toast-region--bottom-start {
+  left: 16px;
+  align-items: flex-start;
+}
+
+.m3x-toast-region--bottom-end {
+  right: 16px;
+  align-items: flex-end;
+}
+
+.m3x-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 288px;
+  max-width: 560px;
+  padding: 10px 8px 10px 14px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  box-shadow: var(--md-sys-elevation-level3);
+  animation: m3x-toast-in var(--md-sys-motion-duration-medium2)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-toast .m3x-alert__icon {
+  margin-top: 0;
+}
+
+.m3x-toast--info .m3x-alert__icon { color: var(--m3x-color-info); }
+.m3x-toast--success .m3x-alert__icon { color: var(--m3x-color-success); }
+.m3x-toast--warning .m3x-alert__icon { color: var(--m3x-color-warning); }
+.m3x-toast--error .m3x-alert__icon { color: var(--md-sys-color-error); }
+
+/* dark scheme note: inverse-surface flips automatically with the theme */
+
+.m3x-toast--leaving {
+  animation: m3x-toast-out var(--md-sys-motion-duration-short4)
+    var(--md-sys-motion-easing-emphasized-accelerate) forwards;
+}
+
+@keyframes m3x-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes m3x-toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.m3x-toast__message {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+.m3x-toast__action {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--md-sys-color-inverse-primary);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+.m3x-toast__close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  display: inline-flex;
+  color: var(--md-sys-color-inverse-on-surface);
+  border-radius: var(--md-sys-shape-corner-full);
+  opacity: 0.8;
+}
+
+.m3x-toast__close:hover {
+  opacity: 1;
+}

@@ -38,3 +38,12 @@ export { Carousel, type CarouselProps, type CarouselItemSpec } from './carousel/
 export { DatePicker, type DatePickerProps } from './date-picker/DatePicker';
 export { TimePicker, type TimePickerProps, type TimeValue } from './time-picker/TimePicker';
 export { SideSheet, type SideSheetProps } from './side-sheet/SideSheet';
+
+// extras — beyond the M3 catalog, styled with M3 + extended tokens
+export { Text, type TextProps, type TypescaleRole } from './text/Text';
+export { Avatar, type AvatarProps } from './avatar/Avatar';
+export { Select, type SelectProps, type SelectOption } from './select/Select';
+export { ComboBox, type ComboBoxProps } from './select/ComboBox';
+export { SelectionCard, type SelectionCardProps } from './selection-card/SelectionCard';
+export { Banner, InlineAlert, type AlertSeverity } from './alert/Alert';
+export { ToastProvider, useToast, type ToastOptions, type ToastProviderProps } from './alert/Toast';

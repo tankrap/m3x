@@ -3,7 +3,7 @@
  * Everything downstream (primitives, components) renders exclusively from the
  * `--md-sys-*` variables emitted here.
  */
-import { ColorScheme, ColorSchemeOptions, colorVar, createColorScheme } from './color';
+import { ColorScheme, ColorSchemeOptions, colorVar, createColorScheme, createExtendedScheme } from './color';
 import {
   MotionSchemeName,
   MotionSchemeTokens,
@@ -56,6 +56,10 @@ export function createTheme(options: ThemeOptions): Theme {
 
   for (const [role, value] of Object.entries(colors)) {
     cssVars[colorVar(role as keyof ColorScheme)] = value;
+  }
+  // extended semantic roles (success/warning/info — beyond the M3 spec)
+  for (const [role, value] of Object.entries(createExtendedScheme(dark))) {
+    cssVars[`--m3x-color-${role.replace(/([A-Z])/g, '-$1').toLowerCase()}`] = value;
   }
   for (const [name, px] of Object.entries(cornerTokens)) {
     cssVars[`--md-sys-shape-corner-${kebab(name)}`] = `${px}px`;

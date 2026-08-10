@@ -46,6 +46,15 @@ import {
   DatePicker,
   TimePicker,
   SideSheet,
+  Text,
+  Avatar,
+  Select,
+  ComboBox,
+  SelectionCard,
+  Banner,
+  InlineAlert,
+  ToastProvider,
+  useToast,
   type TimeValue,
   type ButtonSize,
 } from '@m3x/react';
@@ -102,6 +111,7 @@ export function App() {
 
   return (
     <ThemeProvider seedColor={seed} variant={variant} dark={dark} motionScheme={motionScheme}>
+      <ToastProvider>
       <div
         style={{
           minHeight: '100vh',
@@ -472,6 +482,72 @@ export function App() {
           </div>
         </Section>
 
+        <Section title="Extras: typography, avatars, selects">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 16 }}>
+            <Text variant="displaySmall" emphasized>Display small</Text>
+            <Text variant="headlineSmall">Headline small</Text>
+            <Text variant="titleMedium" color="primary">Title medium · primary</Text>
+            <Text variant="bodyMedium" color="on-surface-variant">
+              Body medium — the quick brown fox jumps over the lazy dog.
+            </Text>
+            <Text variant="labelSmall">LABEL SMALL</Text>
+          </div>
+          <div style={{ ...row, marginBottom: 16 }}>
+            <Avatar name="Ali Connors" />
+            <Avatar name="Sandra Adams" size={48} />
+            <Avatar name="Peter Carlsson" size={56} />
+            <Avatar name="Broken Image" src="http://localhost:1/x.png" />
+          </div>
+          <div style={{ ...row, alignItems: 'flex-start' }}>
+            <Select
+              label="Ripeness"
+              defaultValue="ripe"
+              options={[
+                { value: 'green', label: 'Still green', icon: 'eco' },
+                { value: 'ripe', label: 'Perfectly ripe', icon: 'check_circle' },
+                { value: 'over', label: 'Overripe', icon: 'warning', disabled: true },
+              ]}
+            />
+            <ComboBox
+              label="City"
+              placeholder="Type to search"
+              options={['Tokyo', 'Toronto', 'Turin', 'Oslo', 'Osaka', 'Sydney'].map((c) => ({
+                value: c.toLowerCase(),
+                label: c,
+              }))}
+            />
+          </div>
+          <div style={{ ...row, marginTop: 16 }}>
+            <SelectionCard
+              icon="rocket_launch"
+              title="Pro plan"
+              description="Unlimited projects, priority support"
+              defaultChecked
+            />
+            <SelectionCard mode="radio" name="pg-region" value="us" title="US region" icon="public" defaultChecked />
+            <SelectionCard mode="radio" name="pg-region" value="eu" title="EU region" icon="public" />
+          </div>
+        </Section>
+
+        <Section title="Extras: alerts & toasts">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 640 }}>
+            <Banner
+              severity="warning"
+              title="Storage almost full"
+              actions={<Button variant="text" size="s">Manage storage</Button>}
+              onDismiss={() => {}}
+            >
+              You've used 14.9 GB of 15 GB. New files won't sync until you free up space.
+            </Banner>
+            <InlineAlert severity="success">Your changes were saved.</InlineAlert>
+            <InlineAlert severity="error" title="Payment failed">
+              The card ending in 4242 was declined.
+            </InlineAlert>
+            <InlineAlert severity="info">Tip: press ⌘K to open the command palette.</InlineAlert>
+            <ToastDemo />
+          </div>
+        </Section>
+
         <Section title="Date & time pickers, side sheet">
           <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', flexWrap: 'wrap' }}>
             <DatePicker value={pickedDate} onChange={setPickedDate} initialMonth={new Date(2026, 7, 1)} />
@@ -678,6 +754,24 @@ export function App() {
           </div>
         </Section>
       </div>
+      </ToastProvider>
     </ThemeProvider>
+  );
+}
+
+function ToastDemo() {
+  const { toast } = useToast();
+  return (
+    <div style={row}>
+      <Button variant="tonal" onClick={() => toast({ message: 'Draft saved', severity: 'success' })}>
+        Success toast
+      </Button>
+      <Button variant="tonal" onClick={() => toast({ message: 'Connection lost — retrying', severity: 'warning', actionLabel: 'Retry' })}>
+        Warning toast
+      </Button>
+      <Button variant="tonal" onClick={() => toast({ message: 'Export failed', severity: 'error', duration: 8000 })}>
+        Error toast
+      </Button>
+    </div>
   );
 }

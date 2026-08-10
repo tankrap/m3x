@@ -18,6 +18,7 @@ import {
   SchemeMonochrome,
   SchemeFidelity,
   SchemeContent,
+  TonalPalette,
 } from '@material/material-color-utilities';
 
 /** M3 scheme variants. `tonalSpot` is the M3 default; `vibrant`/`expressive` are the
@@ -136,4 +137,36 @@ export function createColorScheme({
 /** camelCase role → css custom property name, e.g. onPrimaryContainer → --md-sys-color-on-primary-container */
 export function colorVar(role: ColorRole): string {
   return `--md-sys-color-${role.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
+}
+
+// ---------------------------------------------------------------------------
+// Extended semantic roles (beyond the M3 spec): success / warning / info.
+// Built with the same tonal-palette machinery and standard M3 tone mapping so
+// they sit naturally next to spec roles in both schemes.
+// ---------------------------------------------------------------------------
+
+export const EXTENDED_ROLE_GROUPS = ['success', 'warning', 'info'] as const;
+export type ExtendedGroup = (typeof EXTENDED_ROLE_GROUPS)[number];
+
+const EXTENDED_HUES: Record<ExtendedGroup, { hue: number; chroma: number }> = {
+  success: { hue: 145, chroma: 45 },
+  warning: { hue: 75, chroma: 50 },
+  info: { hue: 245, chroma: 40 },
+};
+
+export type ExtendedScheme = Record<string, string>;
+
+/** success/onSuccess/successContainer/onSuccessContainer (+ warning, info). */
+export function createExtendedScheme(dark: boolean): ExtendedScheme {
+  const out: ExtendedScheme = {};
+  for (const group of EXTENDED_ROLE_GROUPS) {
+    const { hue, chroma } = EXTENDED_HUES[group];
+    const palette = TonalPalette.fromHueAndChroma(hue, chroma);
+    const cap = group[0]!.toUpperCase() + group.slice(1);
+    out[group] = hexFromArgb(palette.tone(dark ? 80 : 40));
+    out[`on${cap}`] = hexFromArgb(palette.tone(dark ? 20 : 100));
+    out[`${group}Container`] = hexFromArgb(palette.tone(dark ? 30 : 90));
+    out[`on${cap}Container`] = hexFromArgb(palette.tone(dark ? 90 : 10));
+  }
+  return out;
 }

@@ -190,6 +190,11 @@
   opacity: 0;
 }
 
+.m3x-text-field:not(:focus-within):not([data-populated])
+  .m3x-text-field__input::placeholder {
+  color: transparent;
+}
+
 /* ---- icons ------------------------------------------------------------- */
 .m3x-text-field__leading,
 .m3x-text-field__trailing {
