@@ -8,11 +8,8 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-export interface SelectProps {
+interface SelectBaseProps {
   options: SelectOption[];
-  value?: string | null;
-  defaultValue?: string | null;
-  onChange?: (value: string) => void;
   label?: string;
   placeholder?: string;
   variant?: 'filled' | 'outlined';
@@ -22,38 +19,83 @@ export interface SelectProps {
   className?: string;
 }
 
+interface SingleSelectProps extends SelectBaseProps {
+  multiple?: false;
+  tags?: never;
+  value?: string | null;
+  defaultValue?: string | null;
+  onChange?: (value: string) => void;
+}
+
+interface MultiSelectProps extends SelectBaseProps {
+  multiple: true;
+  /** render the selection as removable tag chips inside the field */
+  tags?: boolean;
+  value?: string[];
+  defaultValue?: string[];
+  onChange?: (value: string[]) => void;
+}
+
+export type SelectProps = SingleSelectProps | MultiSelectProps;
+
 /**
- * Select: a TextField-styled dropdown with full keyboard support (ARIA
- * combobox/listbox pattern, select-only). Extras component.
+ * Select: a TextField-styled dropdown (ARIA select-only combobox pattern) with
+ * keyboard support, single or multi select, and optional tag rendering.
+ * Extras component.
  */
-export function Select({
-  options,
-  value,
-  defaultValue = null,
-  onChange,
-  label,
-  placeholder = '',
-  variant = 'outlined',
-  disabled = false,
-  error = false,
-  supportingText,
-  className,
-}: SelectProps) {
+export function Select(props: SelectProps) {
+  const {
+    options,
+    label,
+    placeholder = '',
+    variant = 'outlined',
+    disabled = false,
+    error = false,
+    supportingText,
+    className,
+  } = props;
+  const multiple = props.multiple === true;
+  const tags = multiple && props.tags === true;
+
   const id = React.useId();
-  const [internal, setInternal] = React.useState<string | null>(defaultValue);
-  const selected = value !== undefined ? value : internal;
+  const [internal, setInternal] = React.useState<string[]>(() => {
+    if (multiple) return (props.defaultValue as string[] | undefined) ?? [];
+    const dv = (props as SingleSelectProps).defaultValue;
+    return dv != null ? [dv] : [];
+  });
+  const controlled = props.value !== undefined;
+  const selected: string[] = controlled
+    ? multiple
+      ? ((props.value as string[]) ?? [])
+      : props.value != null
+        ? [props.value as string]
+        : []
+    : internal;
+
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(0);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const listRef = React.useRef<HTMLUListElement>(null);
 
-  const selectedOption = options.find((o) => o.value === selected) ?? null;
+  const emit = (next: string[]) => {
+    if (!controlled) setInternal(next);
+    if (multiple) (props.onChange as MultiSelectProps['onChange'])?.(next);
+    else if (next[0] != null) (props.onChange as SingleSelectProps['onChange'])?.(next[0]);
+  };
 
-  const commit = (opt: SelectOption) => {
+  const toggle = (opt: SelectOption) => {
     if (opt.disabled) return;
-    if (value === undefined) setInternal(opt.value);
-    onChange?.(opt.value);
-    setOpen(false);
+    if (multiple) {
+      emit(
+        selected.includes(opt.value)
+          ? selected.filter((v) => v !== opt.value)
+          : [...selected, opt.value],
+      );
+      // multi-select stays open for further picks
+    } else {
+      emit([opt.value]);
+      setOpen(false);
+    }
   };
 
   React.useEffect(() => {
@@ -67,11 +109,12 @@ export function Select({
 
   React.useEffect(() => {
     if (open) {
-      const idx = Math.max(0, options.findIndex((o) => o.value === selected));
+      const idx = Math.max(0, options.findIndex((o) => selected.includes(o.value)));
       setActive(idx);
       listRef.current?.children[idx]?.scrollIntoView?.({ block: 'nearest' });
     }
-  }, [open, options, selected]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (disabled) return;
@@ -93,7 +136,10 @@ export function Select({
       case ' ':
         e.preventDefault();
         if (!open) setOpen(true);
-        else if (options[active]) commit(options[active]);
+        else if (options[active]) toggle(options[active]);
+        break;
+      case 'Backspace':
+        if (tags && selected.length > 0) emit(selected.slice(0, -1));
         break;
       case 'Escape':
         setOpen(false);
@@ -101,7 +147,8 @@ export function Select({
     }
   };
 
-  const populated = selectedOption != null || placeholder !== '';
+  const selectedOptions = options.filter((o) => selected.includes(o.value));
+  const populated = selectedOptions.length > 0 || placeholder !== '';
 
   return (
     <div
@@ -110,6 +157,7 @@ export function Select({
         'm3x-select',
         `m3x-text-field`,
         `m3x-text-field--${variant}`,
+        tags ? 'm3x-select--tags' : undefined,
         error ? 'm3x-text-field--error' : undefined,
         disabled ? 'm3x-text-field--disabled' : undefined,
         className,
@@ -130,46 +178,90 @@ export function Select({
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onKeyDown}
       >
-        {label && (
-          <span id={`${id}-label`} className="m3x-text-field__label">
-            {label}
-          </span>
-        )}
-        <span className="m3x-select__value">
-          {selectedOption?.icon && <Icon size={20}>{selectedOption.icon}</Icon>}
-          {selectedOption?.label ?? (
-            <span className="m3x-select__placeholder">{placeholder}</span>
+        <span className="m3x-text-field__content">
+          {label && (
+            <span id={`${id}-label`} className="m3x-text-field__label">
+              {label}
+            </span>
           )}
+          <span className="m3x-select__value">
+            {tags && selectedOptions.length > 0 ? (
+              selectedOptions.map((opt) => (
+                <span key={opt.value} className="m3x-select__tag">
+                  {opt.icon && <Icon size={16}>{opt.icon}</Icon>}
+                  {opt.label}
+                  <span
+                    role="button"
+                    tabIndex={-1}
+                    aria-label={`Remove ${opt.label}`}
+                    className="m3x-select__tag-remove"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      emit(selected.filter((v) => v !== opt.value));
+                    }}
+                  >
+                    <Icon size={14}>close</Icon>
+                  </span>
+                </span>
+              ))
+            ) : selectedOptions.length > 0 ? (
+              <>
+                {selectedOptions[0]!.icon && !multiple && (
+                  <Icon size={20}>{selectedOptions[0]!.icon}</Icon>
+                )}
+                <span className="m3x-select__value-text">
+                  {selectedOptions.map((o) => o.label).join(', ')}
+                </span>
+              </>
+            ) : (
+              <span className="m3x-select__placeholder">{placeholder}</span>
+            )}
+          </span>
         </span>
         <Icon size={24} className="m3x-select__arrow" data-open={open || undefined}>
           arrow_drop_down
         </Icon>
         {variant === 'outlined' && (
-          <fieldset aria-hidden className="m3x-text-field__outline">
+          <fieldset className="m3x-text-field__outline" aria-hidden="true">
             <legend className="m3x-text-field__notch">
               {label ? <span>{label}</span> : null}
             </legend>
           </fieldset>
         )}
+        {variant === 'filled' && <span className="m3x-text-field__indicator" aria-hidden="true" />}
       </button>
       {open && (
-        <ul id={`${id}-listbox`} ref={listRef} role="listbox" className="m3x-select__list">
-          {options.map((opt, i) => (
-            <li
-              key={opt.value}
-              role="option"
-              aria-selected={opt.value === selected}
-              aria-disabled={opt.disabled || undefined}
-              data-active={i === active || undefined}
-              className="m3x-select__option"
-              onPointerEnter={() => setActive(i)}
-              onClick={() => commit(opt)}
-            >
-              {opt.icon && <Icon size={20}>{opt.icon}</Icon>}
-              <span className="m3x-select__option-label">{opt.label}</span>
-              {opt.value === selected && <Icon size={20}>check</Icon>}
-            </li>
-          ))}
+        <ul
+          id={`${id}-listbox`}
+          ref={listRef}
+          role="listbox"
+          aria-multiselectable={multiple || undefined}
+          className="m3x-select__list"
+        >
+          {options.map((opt, i) => {
+            const isSelected = selected.includes(opt.value);
+            return (
+              <li
+                key={opt.value}
+                role="option"
+                aria-selected={isSelected}
+                aria-disabled={opt.disabled || undefined}
+                data-active={i === active || undefined}
+                className="m3x-select__option"
+                onPointerEnter={() => setActive(i)}
+                onClick={() => toggle(opt)}
+              >
+                {multiple && (
+                  <Icon size={20} className="m3x-select__option-checkbox">
+                    {isSelected ? 'check_box' : 'check_box_outline_blank'}
+                  </Icon>
+                )}
+                {opt.icon && <Icon size={20}>{opt.icon}</Icon>}
+                <span className="m3x-select__option-label">{opt.label}</span>
+                {!multiple && isSelected && <Icon size={20}>check</Icon>}
+              </li>
+            );
+          })}
         </ul>
       )}
       {supportingText && <span className="m3x-text-field__supporting">{supportingText}</span>}

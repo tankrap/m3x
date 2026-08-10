@@ -11,12 +11,15 @@
   min-width: 210px;
 }
 
+/* the trigger IS the text-field container: reset button chrome only, keep the
+   container's own height/padding/gap so spacing matches TextField exactly */
 .m3x-select__trigger {
   cursor: pointer;
   text-align: start;
   border: none;
   background: transparent;
-  padding: 0;
+  margin: 0;
+  width: 100%;
   font: inherit;
   color: inherit;
 }
@@ -24,12 +27,103 @@
 .m3x-select__value {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex: 1;
+  align-self: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
   min-width: 0;
   color: var(--md-sys-color-on-surface);
   font-family: var(--md-sys-typescale-body-large-font);
   font-size: var(--md-sys-typescale-body-large-size);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+}
+
+.m3x-select__value-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* tag mode: the field grows with its chips. The container keeps zero block
+   padding so the label's float math is unchanged — the chip row pads itself. */
+.m3x-select--tags .m3x-text-field__container {
+  height: auto;
+  min-height: 56px;
+}
+
+.m3x-select--tags .m3x-text-field__content {
+  height: auto;
+  align-self: stretch;
+}
+
+.m3x-select--tags .m3x-select__value {
+  padding-block: 11px;
+}
+
+/* filled variant floats its label inside the container — clear it */
+.m3x-select--tags.m3x-text-field--filled .m3x-select__value {
+  padding-top: 28px;
+  padding-bottom: 8px;
+}
+
+.m3x-select__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding-inline: 10px 4px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  white-space: nowrap;
+}
+
+.m3x-select__tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--md-sys-shape-corner-full);
+  cursor: pointer;
+}
+
+.m3x-select__tag-remove:hover {
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-on-secondary-container) calc(var(--md-sys-state-hover-state-layer-opacity) * 100%),
+    transparent
+  );
+}
+
+/* combobox tag-mode inline input rides the chip row */
+.m3x-combobox__tag-input {
+  flex: 1;
+  min-width: 80px;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  height: 32px;
+  color: var(--md-sys-color-on-surface);
+  caret-color: var(--md-sys-color-primary);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+}
+
+/* closed combo box reads as a button (hand cursor); open, it's a text input */
+.m3x-combobox:not([data-open]) .m3x-text-field__container,
+.m3x-combobox:not([data-open]) .m3x-text-field__input,
+.m3x-combobox:not([data-open]) .m3x-combobox__tag-input {
+  cursor: pointer;
+}
+
+.m3x-combobox[data-open] .m3x-text-field__input,
+.m3x-combobox[data-open] .m3x-combobox__tag-input {
+  cursor: text;
 }
 
 .m3x-select__placeholder {
@@ -228,7 +322,6 @@
   border-radius: var(--md-sys-shape-corner-medium);
   background: var(--m3x-alert-container);
   color: var(--m3x-alert-on-container);
-  border-inline-start: 4px solid var(--m3x-alert-accent);
 }
 
 .m3x-alert--info {
@@ -335,12 +428,11 @@
   margin-top: 0;
 }
 
-.m3x-toast--info .m3x-alert__icon { color: var(--m3x-color-info); }
-.m3x-toast--success .m3x-alert__icon { color: var(--m3x-color-success); }
-.m3x-toast--warning .m3x-alert__icon { color: var(--m3x-color-warning); }
-.m3x-toast--error .m3x-alert__icon { color: var(--md-sys-color-error); }
-
-/* dark scheme note: inverse-surface flips automatically with the theme */
+/* toasts sit on inverse-surface, so icons use the OPPOSITE scheme's accents */
+.m3x-toast--info .m3x-alert__icon { color: var(--m3x-color-inverse-info); }
+.m3x-toast--success .m3x-alert__icon { color: var(--m3x-color-inverse-success); }
+.m3x-toast--warning .m3x-alert__icon { color: var(--m3x-color-inverse-warning); }
+.m3x-toast--error .m3x-alert__icon { color: var(--md-sys-color-error-container); }
 
 .m3x-toast--leaving {
   animation: m3x-toast-out var(--md-sys-motion-duration-short4)

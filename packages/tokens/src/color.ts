@@ -167,6 +167,8 @@ export function createExtendedScheme(dark: boolean): ExtendedScheme {
     out[`on${cap}`] = hexFromArgb(palette.tone(dark ? 20 : 100));
     out[`${group}Container`] = hexFromArgb(palette.tone(dark ? 30 : 90));
     out[`on${cap}Container`] = hexFromArgb(palette.tone(dark ? 90 : 10));
+    // accent for content sitting on inverse-surface (snackbars/toasts)
+    out[`inverse${cap}`] = hexFromArgb(palette.tone(dark ? 40 : 80));
   }
   return out;
 }

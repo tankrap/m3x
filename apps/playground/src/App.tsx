@@ -516,6 +516,41 @@ export function App() {
                 label: c,
               }))}
             />
+            <Select
+              label="Toppings"
+              multiple
+              defaultValue={['cheese', 'basil']}
+              options={[
+                { value: 'cheese', label: 'Cheese' },
+                { value: 'basil', label: 'Basil' },
+                { value: 'olives', label: 'Olives' },
+                { value: 'onion', label: 'Onion' },
+              ]}
+            />
+            <Select
+              label="Labels"
+              multiple
+              tags
+              variant="filled"
+              defaultValue={['design', 'urgent']}
+              options={[
+                { value: 'design', label: 'Design', icon: 'palette' },
+                { value: 'urgent', label: 'Urgent', icon: 'bolt' },
+                { value: 'later', label: 'Later', icon: 'schedule' },
+                { value: 'docs', label: 'Docs', icon: 'description' },
+              ]}
+            />
+            <ComboBox
+              label="Assignees"
+              multiple
+              defaultSelected={['ali']}
+              options={[
+                { value: 'ali', label: 'Ali Connors' },
+                { value: 'sandra', label: 'Sandra Adams' },
+                { value: 'peter', label: 'Peter Carlsson' },
+                { value: 'trevor', label: 'Trevor Hansen' },
+              ]}
+            />
           </div>
           <div style={{ ...row, marginTop: 16 }}>
             <SelectionCard

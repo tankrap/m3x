@@ -95,6 +95,38 @@ describe('Select', () => {
     fireEvent.keyDown(trigger, { key: 'Enter' });
     expect(onChange).toHaveBeenCalledWith('green');
   });
+
+  it('multiple: accumulates, stays open, joins labels', () => {
+    const onChange = vi.fn();
+    render(wrap(<Select label="Colors" multiple options={options} onChange={onChange} />));
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.click(screen.getByRole('option', { name: 'Red' }));
+    fireEvent.click(screen.getByRole('option', { name: 'Green' }));
+    expect(onChange).toHaveBeenLastCalledWith(['red', 'green']);
+    expect(screen.getByRole('listbox')).toBeInTheDocument(); // stays open
+    expect(screen.getByRole('combobox')).toHaveTextContent('Red, Green');
+    fireEvent.click(screen.getByRole('option', { name: 'Red' })); // deselect
+    expect(onChange).toHaveBeenLastCalledWith(['green']);
+  });
+
+  it('tags mode renders removable chips', () => {
+    const onChange = vi.fn();
+    render(
+      wrap(
+        <Select
+          label="Colors"
+          multiple
+          tags
+          defaultValue={['red', 'green']}
+          options={options}
+          onChange={onChange}
+        />,
+      ),
+    );
+    expect(screen.getByText('Red')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Remove Red' }));
+    expect(onChange).toHaveBeenCalledWith(['green']);
+  });
 });
 
 describe('ComboBox', () => {
@@ -119,6 +151,33 @@ describe('ComboBox', () => {
     render(wrap(<ComboBox label="City" options={options} />));
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'zzz' } });
     expect(screen.getByText('No matches')).toBeInTheDocument();
+  });
+
+  it('multiple: picks become tags, query resets, backspace removes last', () => {
+    const onSelectedChange = vi.fn();
+    render(
+      wrap(
+        <ComboBox label="Cities" multiple options={options} onSelectedChange={onSelectedChange} />,
+      ),
+    );
+    const input = screen.getByRole('combobox');
+    fireEvent.change(input, { target: { value: 'tok' } });
+    fireEvent.click(screen.getByRole('option', { name: 'Tokyo' }));
+    expect(onSelectedChange).toHaveBeenLastCalledWith(['Tokyo']);
+    expect(input).toHaveValue(''); // query reset
+    expect(screen.getByText('Tokyo')).toBeInTheDocument(); // chip
+    fireEvent.change(input, { target: { value: 'os' } });
+    fireEvent.click(screen.getByRole('option', { name: 'Oslo' }));
+    expect(onSelectedChange).toHaveBeenLastCalledWith(['Tokyo', 'Oslo']);
+    fireEvent.keyDown(input, { key: 'Backspace' }); // empty query → pop last tag
+    expect(onSelectedChange).toHaveBeenLastCalledWith(['Tokyo']);
+  });
+
+  it('chosen options are excluded from the list', () => {
+    render(wrap(<ComboBox label="Cities" multiple defaultSelected={['Tokyo']} options={options} />));
+    fireEvent.focus(screen.getByRole('combobox'));
+    expect(screen.queryByRole('option', { name: 'Tokyo' })).not.toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Toronto' })).toBeInTheDocument();
   });
 });
 
