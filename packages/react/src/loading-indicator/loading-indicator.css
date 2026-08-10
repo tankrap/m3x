@@ -1,0 +1,42 @@
+/* M3 Expressive loading indicator — specs/loading-indicator.md */
+
+.m3x-loading-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--md-sys-color-primary);
+}
+
+/* audited 2026-08-09: contained = primary-container / on-primary-container */
+.m3x-loading-indicator--contained {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+.m3x-loading-indicator__spin {
+  display: inline-flex;
+  animation: m3x-loading-spin 4400ms linear infinite;
+}
+
+@keyframes m3x-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.m3x-loading-indicator--static .m3x-loading-indicator__spin {
+  animation: m3x-loading-pulse 2s var(--md-sys-motion-easing-standard) infinite;
+}
+
+@keyframes m3x-loading-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3x-loading-indicator__spin {
+    animation: m3x-loading-pulse 2s var(--md-sys-motion-easing-standard) infinite;
+  }
+}

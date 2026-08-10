@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "playground",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@m3x/playground", "dev"],
+      "port": 5173,
+      "autoPort": true
+    },
+    {
+      "name": "gallery",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@m3x/gallery", "dev"],
+      "port": 5174,
+      "autoPort": true
+    }
+  ]
+}

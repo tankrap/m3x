@@ -1,0 +1,124 @@
+/* M3 tabs + navigation bar — specs/tabs-navigation.md */
+
+/* ---- tabs -------------------------------------------------------------- */
+.m3x-tabs {
+  width: 100%;
+}
+
+.m3x-tabs__list {
+  position: relative;
+  display: flex;
+  box-shadow: inset 0 -1px 0 var(--md-sys-color-outline-variant);
+}
+
+.m3x-tabs__tab {
+  position: relative;
+  flex: 1;
+  height: 48px;
+  border: none;
+  margin: 0;
+  padding: 0 16px;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  transition: color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  white-space: nowrap;
+}
+
+.m3x-tabs__tab[data-selected] {
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-tabs__tab:disabled {
+  cursor: default;
+  pointer-events: none;
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-content-opacity) * 100%),
+    transparent
+  );
+}
+
+.m3x-tabs__indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--md-sys-color-primary);
+  pointer-events: none;
+}
+
+/* ---- navigation bar ---------------------------------------------------- */
+.m3x-nav-bar {
+  display: flex;
+  height: 80px;
+  background: var(--md-sys-color-surface-container);
+}
+
+.m3x-nav-bar__item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3x-nav-bar__icon-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-full);
+  overflow: visible;
+}
+
+.m3x-nav-bar__icon-area .m3x-ripple {
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+.m3x-nav-bar__pill {
+  position: absolute;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-secondary-container);
+  transition: opacity var(--md-sys-motion-duration-short2)
+    var(--md-sys-motion-easing-standard);
+}
+
+.m3x-nav-bar__icon {
+  position: relative;
+  display: inline-flex;
+}
+
+.m3x-nav-bar__item[data-active] .m3x-nav-bar__icon {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.m3x-nav-bar__label {
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+}
+
+.m3x-nav-bar__item[data-active] .m3x-nav-bar__label {
+  color: var(--md-sys-color-on-surface);
+  font-weight: var(--md-sys-typescale-emphasized-label-medium-weight);
+}

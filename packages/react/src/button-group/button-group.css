@@ -1,0 +1,20 @@
+/* M3 Expressive button group — specs/button-group.md */
+
+.m3x-button-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.m3x-button-group__member {
+  display: inline-flex;
+  overflow: hidden;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* member buttons fill their (animated) wrapper */
+.m3x-button-group__member > .m3x-button,
+.m3x-button-group__member > .m3x-icon-button {
+  width: 100%;
+  min-width: 0;
+}

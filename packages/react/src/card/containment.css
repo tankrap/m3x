@@ -1,0 +1,221 @@
+/* M3 containment: card, dialog, snackbar, badge, divider — specs/containment.md */
+
+/* ---- card -------------------------------------------------------------- */
+.m3x-card {
+  position: relative;
+  border-radius: var(--md-sys-shape-corner-medium);
+  color: var(--md-sys-color-on-surface);
+  transition: box-shadow var(--md-sys-motion-duration-short2)
+    var(--md-sys-motion-easing-standard);
+}
+
+.m3x-card--elevated {
+  background: var(--md-sys-color-surface-container-low);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.m3x-card--filled {
+  background: var(--md-sys-color-surface-container-highest);
+}
+
+.m3x-card--outlined {
+  background: var(--md-sys-color-surface);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-outline-variant);
+}
+
+.m3x-card--interactive {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m3x-card--interactive.m3x-card--elevated:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.m3x-card--interactive.m3x-card--filled:hover {
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+/* ---- dialog ------------------------------------------------------------ */
+.m3x-dialog {
+  border: none;
+  padding: 0;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  box-shadow: var(--md-sys-elevation-level3);
+  min-width: 280px;
+  max-width: min(560px, calc(100vw - 48px));
+}
+
+.m3x-dialog::backdrop {
+  background: color-mix(in srgb, var(--md-sys-color-scrim, #000) 32%, transparent);
+}
+
+.m3x-dialog[open] {
+  animation: m3x-dialog-in var(--md-sys-motion-duration-medium4)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes m3x-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.m3x-dialog__content {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.m3x-dialog__icon {
+  color: var(--md-sys-color-secondary);
+  align-self: center;
+  margin-bottom: 16px;
+}
+
+.m3x-dialog__headline {
+  margin: 0;
+  font-family: var(--md-sys-typescale-headline-small-font);
+  font-size: var(--md-sys-typescale-headline-small-size);
+  line-height: var(--md-sys-typescale-headline-small-line-height);
+  font-weight: var(--md-sys-typescale-headline-small-weight);
+}
+
+.m3x-dialog--with-icon .m3x-dialog__headline {
+  text-align: center;
+}
+
+.m3x-dialog__body {
+  margin-top: 16px;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.m3x-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+/* ---- snackbar ---------------------------------------------------------- */
+.m3x-snackbar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  min-width: 288px;
+  max-width: min(560px, calc(100vw - 32px));
+  padding-inline: 16px 8px;
+  background: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  box-shadow: var(--md-sys-elevation-level3);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  animation: m3x-snackbar-in var(--md-sys-motion-duration-medium2)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes m3x-snackbar-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+}
+
+.m3x-snackbar__message {
+  flex: 1;
+  padding-block: 14px;
+}
+
+.m3x-snackbar__action,
+.m3x-snackbar__close {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-inverse-primary);
+  padding: 8px 12px;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  white-space: nowrap;
+}
+
+.m3x-snackbar__close {
+  color: var(--md-sys-color-inverse-on-surface);
+  display: inline-flex;
+  padding: 8px;
+}
+
+/* ---- badge ------------------------------------------------------------- */
+.m3x-badge__anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.m3x-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+.m3x-badge--dot {
+  width: 6px;
+  height: 6px;
+}
+
+.m3x-badge--large {
+  min-width: 16px;
+  height: 16px;
+  padding-inline: 4px;
+  font-family: var(--md-sys-typescale-label-small-font);
+  font-size: var(--md-sys-typescale-label-small-size);
+  font-weight: var(--md-sys-typescale-label-small-weight);
+  line-height: 1;
+}
+
+.m3x-badge--anchored {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -25%);
+}
+
+.m3x-badge--anchored.m3x-badge--dot {
+  transform: translate(25%, 0%);
+}
+
+/* ---- divider ----------------------------------------------------------- */
+.m3x-divider {
+  border: none;
+  margin: 0;
+  height: 1px;
+  align-self: stretch;
+  background: var(--md-sys-color-outline-variant);
+}
+
+.m3x-divider--inset {
+  margin-inline: 16px;
+}
+
+.m3x-divider--vertical {
+  width: 1px;
+  height: auto;
+  min-height: 100%;
+}

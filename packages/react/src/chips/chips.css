@@ -1,0 +1,111 @@
+/* M3 chips — specs/chips.md */
+
+.m3x-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding-inline: 16px;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background: transparent;
+  border-radius: var(--md-sys-shape-corner-small);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  white-space: nowrap;
+  transition:
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-chip:has(.m3x-chip__icon) {
+  padding-inline-start: 8px;
+}
+
+.m3x-chip--filter,
+.m3x-chip--input {
+  color: var(--md-sys-color-on-surface);
+}
+
+.m3x-chip__icon {
+  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
+}
+
+.m3x-chip__icon--primary {
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-chip__check {
+  color: var(--md-sys-color-on-secondary-container);
+  animation: m3x-chip-check-in var(--md-sys-motion-duration-short3)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes m3x-chip-check-in {
+  from {
+    transform: scale(0);
+  }
+}
+
+.m3x-chip--filter[data-selected] {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  box-shadow: none;
+}
+
+.m3x-chip--filter[data-selected] .m3x-chip__icon {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* input chip: container is a span, remove is its own button */
+.m3x-chip--input {
+  cursor: default;
+  padding-inline-end: 8px;
+}
+
+.m3x-chip__remove {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-inline-end: -4px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3x-chip__remove:hover {
+  background: color-mix(
+    in srgb,
+    currentColor calc(var(--md-sys-state-hover-state-layer-opacity) * 100%),
+    transparent
+  );
+}
+
+.m3x-chip:disabled,
+.m3x-chip--disabled {
+  cursor: default;
+  pointer-events: none;
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-content-opacity) * 100%),
+    transparent
+  );
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+}

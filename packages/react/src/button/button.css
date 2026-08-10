@@ -1,0 +1,214 @@
+/* M3 Expressive common button — specs/button.md. Token-driven: colors/type/
+   elevation only via --md-sys-*; measurements are md.comp constants. */
+
+.m3x-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  height: var(--_height);
+  padding-inline: var(--_padding);
+  gap: var(--_gap);
+  font-family: var(--_label-font);
+  font-size: var(--_label-size);
+  line-height: var(--_label-line-height);
+  font-weight: var(--_label-weight);
+  letter-spacing: var(--_label-tracking);
+  transition:
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-button__label {
+  white-space: nowrap;
+}
+
+/* ---- sizes ------------------------------------------------------------ */
+.m3x-button--xs {
+  --_height: 32px;
+  --_padding: 12px;
+  --_gap: 8px;
+  --_label-font: var(--md-sys-typescale-label-large-font);
+  --_label-size: var(--md-sys-typescale-label-large-size);
+  --_label-line-height: var(--md-sys-typescale-label-large-line-height);
+  --_label-weight: var(--md-sys-typescale-label-large-weight);
+  --_label-tracking: var(--md-sys-typescale-label-large-tracking);
+  --_outline-width: 1px;
+}
+
+.m3x-button--s {
+  --_height: 40px;
+  --_padding: 16px;
+  --_gap: 8px;
+  --_label-font: var(--md-sys-typescale-label-large-font);
+  --_label-size: var(--md-sys-typescale-label-large-size);
+  --_label-line-height: var(--md-sys-typescale-label-large-line-height);
+  --_label-weight: var(--md-sys-typescale-label-large-weight);
+  --_label-tracking: var(--md-sys-typescale-label-large-tracking);
+  --_outline-width: 1px;
+}
+
+.m3x-button--m {
+  --_height: 56px;
+  --_padding: 24px;
+  --_gap: 8px;
+  --_label-font: var(--md-sys-typescale-title-medium-font);
+  --_label-size: var(--md-sys-typescale-title-medium-size);
+  --_label-line-height: var(--md-sys-typescale-title-medium-line-height);
+  --_label-weight: var(--md-sys-typescale-title-medium-weight);
+  --_label-tracking: var(--md-sys-typescale-title-medium-tracking);
+  --_outline-width: 1px;
+}
+
+.m3x-button--l {
+  --_height: 96px;
+  --_padding: 48px;
+  --_gap: 12px;
+  --_label-font: var(--md-sys-typescale-headline-small-font);
+  --_label-size: var(--md-sys-typescale-headline-small-size);
+  --_label-line-height: var(--md-sys-typescale-headline-small-line-height);
+  --_label-weight: var(--md-sys-typescale-headline-small-weight);
+  --_label-tracking: var(--md-sys-typescale-headline-small-tracking);
+  --_outline-width: 2px;
+}
+
+.m3x-button--xl {
+  --_height: 136px;
+  --_padding: 64px;
+  --_gap: 16px;
+  --_label-font: var(--md-sys-typescale-headline-large-font);
+  --_label-size: var(--md-sys-typescale-headline-large-size);
+  --_label-line-height: var(--md-sys-typescale-headline-large-line-height);
+  --_label-weight: var(--md-sys-typescale-headline-large-weight);
+  --_label-tracking: var(--md-sys-typescale-headline-large-tracking);
+  --_outline-width: 3px;
+}
+
+/* XS/S: extend touch target to 48dp minimum */
+.m3x-button--xs::after,
+.m3x-button--s::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 48px;
+  transform: translateY(-50%);
+}
+
+/* ---- color styles ------------------------------------------------------ */
+.m3x-button--filled {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.m3x-button--tonal {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.m3x-button--elevated {
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-primary);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.m3x-button--elevated:hover:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.m3x-button--filled:hover:not(:disabled),
+.m3x-button--tonal:hover:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.m3x-button--outlined {
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  box-shadow: inset 0 0 0 var(--_outline-width) var(--md-sys-color-outline-variant);
+}
+
+.m3x-button--text {
+  background: transparent;
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-button--text.m3x-button--xs,
+.m3x-button--text.m3x-button--s {
+  --_padding: 12px;
+}
+.m3x-button--text.m3x-button--m {
+  --_padding: 16px;
+}
+.m3x-button--text.m3x-button--l {
+  --_padding: 32px;
+}
+.m3x-button--text.m3x-button--xl {
+  --_padding: 48px;
+}
+
+/* ---- toggle (selected) — audited 2026-08-09 against live spec ----------- */
+.m3x-button--filled[aria-pressed='false'] {
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.m3x-button--filled[data-selected] {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+/* tonal: unselected keeps secondary-container; selected deepens to secondary */
+.m3x-button--tonal[data-selected] {
+  background: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
+.m3x-button--outlined[data-selected] {
+  background: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  box-shadow: none;
+}
+
+.m3x-button--elevated[data-selected] {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+/* ---- disabled ---------------------------------------------------------- */
+.m3x-button:disabled {
+  cursor: default;
+  pointer-events: none;
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-content-opacity) * 100%),
+    transparent
+  );
+  box-shadow: none;
+}
+
+.m3x-button--filled:disabled,
+.m3x-button--tonal:disabled,
+.m3x-button--elevated:disabled {
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-container-opacity) * 100%),
+    transparent
+  );
+}
+
+.m3x-button--outlined:disabled {
+  box-shadow: inset 0 0 0 var(--_outline-width)
+    color-mix(
+      in srgb,
+      var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-container-opacity) * 100%),
+      transparent
+    );
+}

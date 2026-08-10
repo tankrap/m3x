@@ -1,0 +1,107 @@
+/* @m3x/primitives — token-driven styles only (--md-* custom properties). */
+
+/* ---- Ripple / state layer -------------------------------------------- */
+.m3x-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* hover state layer */
+.m3x-ripple::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short2, 100ms)
+    var(--md-sys-motion-easing-standard, linear);
+}
+
+.m3x-ripple[data-hovered]::before {
+  opacity: var(--md-sys-state-hover-state-layer-opacity, 0.08);
+}
+
+/* press ripple (animated via WAAPI from Ripple.tsx) */
+.m3x-ripple__press {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(
+    closest-side,
+    currentColor max(100% - 70px, 65%),
+    transparent 100%
+  );
+}
+
+/* ---- Focus ring ------------------------------------------------------- */
+.m3x-focus-ring {
+  position: absolute;
+  inset: -5px; /* 2dp offset + 3dp ring drawn outside the container */
+  border: 3px solid var(--md-sys-color-secondary);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.m3x-focus-host:focus-visible .m3x-focus-ring {
+  opacity: 1;
+  animation: m3x-focus-grow var(--md-sys-motion-duration-medium2, 300ms)
+    var(--md-sys-motion-easing-emphasized-decelerate, ease-out);
+}
+
+@keyframes m3x-focus-grow {
+  from {
+    border-width: 6px;
+    inset: -8px;
+  }
+}
+
+/* keyboard-only focus: suppress default outline, ring handles it */
+.m3x-focus-host {
+  outline: none;
+}
+
+/* ---- Elevation -------------------------------------------------------- */
+.m3x-elevation {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: box-shadow var(--md-sys-motion-duration-short4, 200ms)
+    var(--md-sys-motion-easing-standard, ease);
+}
+
+/* ---- Icon (Material Symbols) ------------------------------------------ */
+.m3x-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  transition: font-variation-settings var(--md-sys-motion-duration-short4, 200ms)
+    var(--md-sys-motion-easing-standard, ease);
+}
+
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+}
+
+.material-symbols-sharp {
+  font-family: 'Material Symbols Sharp';
+}

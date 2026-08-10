@@ -1,0 +1,47 @@
+/* M3 Expressive toolbars — specs/toolbars.md */
+
+.m3x-docked-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 64px;
+  padding-inline: 16px;
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3x-floating-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  /* audited 2026-08-09: "all toolbars are 64dp high" by default */
+  min-height: 64px;
+  box-sizing: border-box;
+  border-radius: var(--md-sys-shape-corner-full);
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.m3x-floating-toolbar--vertical {
+  min-height: 0;
+  min-width: 64px;
+}
+
+.m3x-floating-toolbar--vertical {
+  flex-direction: column;
+}
+
+.m3x-floating-toolbar--standard {
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.m3x-floating-toolbar--vibrant {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+/* vibrant toolbars recolor hosted standard icon buttons for contrast */
+.m3x-floating-toolbar--vibrant .m3x-icon-button--standard {
+  color: var(--md-sys-color-on-primary-container);
+}

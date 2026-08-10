@@ -1,0 +1,149 @@
+/* M3 Expressive FAB / extended FAB — specs/fab.md */
+
+.m3x-fab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  width: var(--_size);
+  height: var(--_size);
+  border-radius: var(--_corner);
+  box-shadow: var(--md-sys-elevation-level3);
+  transition:
+    box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-fab:hover:not(:disabled) {
+  box-shadow: var(--md-sys-elevation-level4);
+}
+
+.m3x-fab--baseline {
+  --_size: 56px;
+  --_corner: var(--md-sys-shape-corner-large); /* 16px */
+  --_padding: 16px;
+  --_gap: 8px;
+  --_label-role: label-large;
+}
+.m3x-fab--medium {
+  --_size: 80px;
+  --_corner: var(--md-sys-shape-corner-extra-large); /* Expressive medium FAB: 24-ish */
+  --_padding: 20px;
+  --_gap: 10px;
+  --_label-role: title-medium;
+}
+.m3x-fab--large {
+  --_size: 96px;
+  --_corner: var(--md-sys-shape-corner-extra-large); /* 28px */
+  --_padding: 28px;
+  --_gap: 12px;
+  --_label-role: title-large;
+}
+
+/* corners: medium FAB uses 24px per spec — corner-large-increased+4; keep explicit */
+.m3x-fab--medium { --_corner: 24px; }
+.m3x-fab--large { --_corner: 28px; }
+
+/* ---- colors ------------------------------------------------------------ */
+.m3x-fab--primary-container {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+.m3x-fab--secondary-container {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+.m3x-fab--tertiary-container {
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+.m3x-fab--primary {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+.m3x-fab--secondary {
+  background: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+.m3x-fab--tertiary {
+  background: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
+}
+/* legacy — spec: "no longer recommended" */
+.m3x-fab--surface {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-primary);
+}
+
+/* ---- extended ---------------------------------------------------------- */
+.m3x-fab--extended {
+  width: auto;
+  padding-inline: var(--_padding);
+}
+
+.m3x-fab__label-clip {
+  display: grid;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  transition: grid-template-columns var(--md-sys-motion-duration-medium2)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-fab__label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-inline-start: var(--_gap);
+  opacity: 1;
+  transition: opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-fab--extended.m3x-fab--baseline .m3x-fab__label {
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+}
+.m3x-fab--extended.m3x-fab--medium .m3x-fab__label {
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  letter-spacing: var(--md-sys-typescale-title-medium-tracking);
+}
+.m3x-fab--extended.m3x-fab--large .m3x-fab__label {
+  font-family: var(--md-sys-typescale-title-large-font);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: var(--md-sys-typescale-title-large-weight);
+  letter-spacing: var(--md-sys-typescale-title-large-tracking);
+}
+
+.m3x-fab--extended[data-collapsed] .m3x-fab__label-clip {
+  grid-template-columns: 0fr;
+}
+
+.m3x-fab--extended[data-collapsed] .m3x-fab__label {
+  opacity: 0;
+  margin-inline-start: 0;
+}
+
+/* ---- disabled ---------------------------------------------------------- */
+.m3x-fab:disabled {
+  cursor: default;
+  pointer-events: none;
+  box-shadow: none;
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-container-opacity) * 100%),
+    transparent
+  );
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-content-opacity) * 100%),
+    transparent
+  );
+}

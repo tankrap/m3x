@@ -1,0 +1,235 @@
+/* M3 text field — specs/text-field.md */
+
+.m3x-text-field {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 210px;
+  font-family: var(--md-sys-typescale-body-large-font);
+}
+
+.m3x-text-field__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding-inline: 16px;
+  gap: 16px;
+  cursor: text;
+}
+
+/* ---- filled ------------------------------------------------------------ */
+.m3x-text-field--filled .m3x-text-field__container {
+  background: var(--md-sys-color-surface-container-highest);
+  border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;
+}
+
+.m3x-text-field__indicator {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--md-sys-color-on-surface-variant);
+  transition:
+    height var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-text-field--filled:hover:not(.m3x-text-field--disabled) .m3x-text-field__indicator {
+  background: var(--md-sys-color-on-surface);
+}
+
+.m3x-text-field--filled:focus-within .m3x-text-field__indicator {
+  height: 2px;
+  background: var(--md-sys-color-primary);
+}
+
+.m3x-text-field--error .m3x-text-field__indicator,
+.m3x-text-field--error:focus-within .m3x-text-field__indicator {
+  background: var(--md-sys-color-error);
+}
+
+/* ---- outlined ---------------------------------------------------------- */
+.m3x-text-field__outline {
+  position: absolute;
+  inset: -5px 0 0 0;
+  margin: 0;
+  padding: 0 12px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  pointer-events: none;
+  transition: border-color var(--md-sys-motion-duration-short2)
+    var(--md-sys-motion-easing-standard);
+}
+
+.m3x-text-field--outlined:hover:not(.m3x-text-field--disabled) .m3x-text-field__outline {
+  border-color: var(--md-sys-color-on-surface);
+}
+
+.m3x-text-field--outlined:focus-within .m3x-text-field__outline {
+  border-width: 2px;
+  border-color: var(--md-sys-color-primary);
+}
+
+.m3x-text-field--outlined.m3x-text-field--error .m3x-text-field__outline {
+  border-color: var(--md-sys-color-error);
+}
+
+/* notch: legend expands when the label floats */
+.m3x-text-field__notch {
+  margin-inline-start: -4px;
+  max-width: 0.01px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  visibility: hidden;
+  font-size: var(--md-sys-typescale-body-small-size);
+  transition: max-width var(--md-sys-motion-duration-short2)
+    var(--md-sys-motion-easing-standard);
+}
+
+.m3x-text-field__notch > span {
+  padding-inline: 4px;
+}
+
+.m3x-text-field--outlined:focus-within .m3x-text-field__notch,
+.m3x-text-field--outlined[data-populated] .m3x-text-field__notch {
+  max-width: 100%;
+}
+
+/* ---- label ------------------------------------------------------------- */
+.m3x-text-field__content {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.m3x-text-field__label {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-large-size);
+  pointer-events: none;
+  white-space: nowrap;
+  transform-origin: left top;
+  transition:
+    all var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-text-field:focus-within .m3x-text-field__label,
+.m3x-text-field[data-populated] .m3x-text-field__label {
+  font-size: var(--md-sys-typescale-body-small-size);
+}
+
+.m3x-text-field--filled:focus-within .m3x-text-field__label,
+.m3x-text-field--filled[data-populated] .m3x-text-field__label {
+  top: 8px;
+  transform: none;
+}
+
+.m3x-text-field--outlined:focus-within .m3x-text-field__label,
+.m3x-text-field--outlined[data-populated] .m3x-text-field__label {
+  top: -8px;
+  transform: none;
+}
+
+.m3x-text-field:focus-within .m3x-text-field__label {
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-text-field--error .m3x-text-field__label {
+  color: var(--md-sys-color-error);
+}
+
+/* ---- input row --------------------------------------------------------- */
+.m3x-text-field__input-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.m3x-text-field--filled .m3x-text-field__input-row {
+  padding-top: 20px;
+  padding-bottom: 4px;
+}
+
+.m3x-text-field__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  color: var(--md-sys-color-on-surface);
+  caret-color: var(--md-sys-color-primary);
+  font-family: inherit;
+  font-size: var(--md-sys-typescale-body-large-size);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+}
+
+.m3x-text-field--error .m3x-text-field__input {
+  caret-color: var(--md-sys-color-error);
+}
+
+.m3x-text-field__affix {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-large-size);
+}
+
+.m3x-text-field--filled .m3x-text-field__affix {
+  align-self: center;
+}
+
+/* hide affixes/placeholder until floated so they don't collide with the label */
+.m3x-text-field:not(:focus-within):not([data-populated]) .m3x-text-field__affix {
+  opacity: 0;
+}
+
+/* ---- icons ------------------------------------------------------------- */
+.m3x-text-field__leading,
+.m3x-text-field__trailing {
+  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
+}
+
+.m3x-text-field--error .m3x-text-field__trailing {
+  color: var(--md-sys-color-error);
+}
+
+.m3x-text-field__trailing--button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+/* ---- supporting text ---------------------------------------------------- */
+.m3x-text-field__supporting {
+  padding: 4px 16px 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-small-size);
+  line-height: var(--md-sys-typescale-body-small-line-height);
+}
+
+.m3x-text-field--error .m3x-text-field__supporting {
+  color: var(--md-sys-color-error);
+}
+
+/* ---- disabled ---------------------------------------------------------- */
+.m3x-text-field--disabled {
+  pointer-events: none;
+}
+
+.m3x-text-field--disabled .m3x-text-field__container {
+  opacity: 0.5;
+}

@@ -1,0 +1,254 @@
+/* M3 selection controls: checkbox, radio, switch — specs/selection-controls.md */
+
+/* ---- shared label row -------------------------------------------------- */
+.m3x-checkbox,
+.m3x-radio,
+.m3x-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  color: var(--md-sys-color-on-surface);
+}
+
+.m3x-checkbox--disabled,
+.m3x-radio--disabled,
+.m3x-switch--disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.m3x-checkbox--disabled .m3x-checkbox__label,
+.m3x-radio--disabled .m3x-radio__label,
+.m3x-switch--disabled .m3x-switch__label {
+  opacity: var(--md-sys-state-disabled-content-opacity);
+}
+
+/* ---- checkbox ---------------------------------------------------------- */
+.m3x-checkbox__target,
+.m3x-radio__target {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.m3x-checkbox__input,
+.m3x-radio__input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.m3x-checkbox__state-layer,
+.m3x-radio__state-layer,
+.m3x-switch__state-layer {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+}
+
+.m3x-checkbox__input:checked ~ .m3x-checkbox__state-layer,
+.m3x-radio__input:checked ~ .m3x-radio__state-layer {
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-checkbox__box {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-on-surface-variant);
+  background: transparent;
+  transition:
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  pointer-events: none;
+}
+
+.m3x-checkbox__input:checked ~ .m3x-checkbox__box,
+.m3x-checkbox__input:indeterminate ~ .m3x-checkbox__box {
+  background: var(--md-sys-color-primary);
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-primary);
+}
+
+.m3x-checkbox--error .m3x-checkbox__box {
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-error);
+}
+
+.m3x-checkbox--error .m3x-checkbox__input:checked ~ .m3x-checkbox__box,
+.m3x-checkbox--error .m3x-checkbox__input:indeterminate ~ .m3x-checkbox__box {
+  background: var(--md-sys-color-error);
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-error);
+}
+
+.m3x-checkbox__mark {
+  position: absolute;
+  inset: 0;
+  fill: none;
+  stroke: var(--md-sys-color-on-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.m3x-checkbox--error .m3x-checkbox__mark {
+  stroke: var(--md-sys-color-on-error);
+}
+
+.m3x-checkbox__check {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  transition: stroke-dashoffset var(--md-sys-motion-duration-short4)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-checkbox__input:checked ~ .m3x-checkbox__box .m3x-checkbox__check {
+  stroke-dashoffset: 0;
+}
+
+.m3x-checkbox__dash {
+  opacity: 0;
+}
+
+.m3x-checkbox__input:indeterminate ~ .m3x-checkbox__box .m3x-checkbox__dash {
+  opacity: 1;
+}
+
+.m3x-checkbox--disabled .m3x-checkbox__box {
+  box-shadow: inset 0 0 0 2px
+    color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+.m3x-checkbox--disabled .m3x-checkbox__input:checked ~ .m3x-checkbox__box {
+  background: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+  box-shadow: none;
+}
+
+/* ---- radio ------------------------------------------------------------- */
+.m3x-radio__ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--md-sys-shape-corner-full);
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-on-surface-variant);
+  transition: box-shadow var(--md-sys-motion-duration-short2)
+    var(--md-sys-motion-easing-standard);
+  pointer-events: none;
+}
+
+.m3x-radio__input:checked ~ .m3x-radio__ring {
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-primary);
+}
+
+.m3x-radio__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-primary);
+  transform: scale(0);
+  transition: transform var(--md-sys-motion-duration-short3)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-radio__input:checked ~ .m3x-radio__ring .m3x-radio__dot {
+  transform: scale(1);
+}
+
+.m3x-radio--disabled .m3x-radio__ring {
+  box-shadow: inset 0 0 0 2px
+    color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+.m3x-radio--disabled .m3x-radio__dot {
+  background: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+}
+
+/* ---- switch ------------------------------------------------------------ */
+.m3x-switch__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 52px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-highest);
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-outline);
+  transition:
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-switch__track[data-selected] {
+  background: var(--md-sys-color-primary);
+  box-shadow: none;
+}
+
+.m3x-switch__input {
+  position: absolute;
+  inset: -8px;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.m3x-switch__thumb-container {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.m3x-switch__state-layer {
+  color: var(--md-sys-color-on-surface);
+}
+
+.m3x-switch__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-outline);
+  transition: background-color var(--md-sys-motion-duration-short2)
+    var(--md-sys-motion-easing-standard);
+  overflow: hidden;
+}
+
+.m3x-switch__thumb[data-selected] {
+  background: var(--md-sys-color-on-primary);
+}
+
+.m3x-switch__icon {
+  color: var(--md-sys-color-surface-container-highest);
+}
+
+.m3x-switch__thumb[data-selected] .m3x-switch__icon {
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.m3x-switch--disabled .m3x-switch__track {
+  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 100%, transparent);
+  box-shadow: inset 0 0 0 2px
+    color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+  opacity: 0.6;
+}

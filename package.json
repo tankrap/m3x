@@ -1,0 +1,21 @@
+{
+  "name": "m3x-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "React implementation of Material Design 3 + M3 Expressive. Not affiliated with or endorsed by Google.",
+  "scripts": {
+    "dev": "pnpm --filter @m3x/playground dev",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm -r build",
+    "test:vr": "playwright test"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "tsup": "^8.5.1"
+  }
+}

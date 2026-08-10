@@ -1,0 +1,71 @@
+/* M3 Expressive split button — specs/split-button.md */
+
+.m3x-split-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* trailing menu button: icon-only, narrower padding
+   TODO(audit): verify trailing paddings against live spec */
+.m3x-split-button__trailing {
+  padding-inline: calc(var(--_padding) * 0.55);
+}
+
+.m3x-split-button__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  min-width: 180px;
+  background: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level2);
+  animation: m3x-menu-in var(--md-sys-motion-duration-medium1)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+  transform-origin: top right;
+}
+
+@keyframes m3x-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.96);
+  }
+}
+
+.m3x-split-button__menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface);
+  padding: 12px 16px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  text-align: start;
+  white-space: nowrap;
+}
+
+.m3x-split-button__menu-item:disabled {
+  cursor: default;
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-disabled-content-opacity) * 100%),
+    transparent
+  );
+}
+
+.m3x-split-button__menu-item .m3x-icon {
+  color: var(--md-sys-color-on-surface-variant);
+}
