@@ -5,6 +5,13 @@ const BASE = 'http://localhost:5199';
 async function ready(page: Page) {
   await page.goto(BASE);
   await page.evaluate(() => document.fonts.ready);
+  // fonts.ready can resolve before the icon-font stylesheet has even been
+  // fetched — wait until the Material Symbols face is actually usable
+  await page.waitForFunction(
+    () => document.fonts.check('24px "Material Symbols Outlined"'),
+    undefined,
+    { timeout: 30_000 },
+  );
   // settle initial layout/measure passes (button-group width measurement etc.)
   await page.waitForTimeout(400);
 }

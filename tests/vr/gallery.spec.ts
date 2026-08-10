@@ -7,6 +7,13 @@ test('gallery apps', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(BASE);
   await page.evaluate(() => document.fonts.ready);
+  // fonts.ready can resolve before the icon-font stylesheet has even been
+  // fetched — wait until the Material Symbols face is actually usable
+  await page.waitForFunction(
+    () => document.fonts.check('24px "Material Symbols Outlined"'),
+    undefined,
+    { timeout: 30_000 },
+  );
   await page.waitForTimeout(400);
 
   for (const app of APPS) {
