@@ -32,9 +32,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install chromium --with-deps
       - run: pnpm test:vr
-        # font rendering differs across OSes; baselines are captured on macOS.
-        # Keep VR advisory in CI until Linux baselines are added.
-        continue-on-error: true
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
