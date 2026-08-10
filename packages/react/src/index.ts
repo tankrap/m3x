@@ -30,6 +30,7 @@ export { List, ListItem, type ListProps, type ListItemProps } from './list/List'
 export { Tooltip, type TooltipProps } from './tooltip/Tooltip';
 export { BottomSheet, type BottomSheetProps } from './bottom-sheet/BottomSheet';
 export { SearchBar, type SearchBarProps, type SearchSuggestion } from './search/SearchBar';
+export { SearchView, type SearchViewProps } from './search/SearchView';
 export { SegmentedButtons, type SegmentedButtonsProps, type SegmentSpec } from './segmented/SegmentedButtons';
 export { RichTooltip, type RichTooltipProps } from './tooltip/RichTooltip';
 export { NavigationDrawer, type NavigationDrawerProps, type DrawerItemSpec } from './navigation-drawer/NavigationDrawer';

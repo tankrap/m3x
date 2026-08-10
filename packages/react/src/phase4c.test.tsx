@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ThemeProvider } from '@m3x/primitives';
 import { SearchBar } from './search/SearchBar';
+import { SearchView } from './search/SearchView';
 import { SegmentedButtons } from './segmented/SegmentedButtons';
 import { RichTooltip } from './tooltip/RichTooltip';
 import { NavigationDrawer } from './navigation-drawer/NavigationDrawer';
@@ -31,6 +32,40 @@ describe('SearchBar', () => {
     expect(screen.getByRole('listbox')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('option', { name: 'meeting notes' }));
     expect(onPick).toHaveBeenCalledWith(expect.objectContaining({ label: 'meeting notes' }));
+  });
+});
+
+describe('SearchView', () => {
+  it('opens full-screen, clears, and closes', () => {
+    HTMLDialogElement.prototype.showModal =
+      HTMLDialogElement.prototype.showModal ??
+      function (this: HTMLDialogElement) {
+        this.open = true;
+      };
+    HTMLDialogElement.prototype.close =
+      HTMLDialogElement.prototype.close ??
+      function (this: HTMLDialogElement) {
+        this.open = false;
+      };
+    const onClose = vi.fn();
+    function Harness() {
+      const [v, setV] = React.useState('mee');
+      return (
+        <SearchView
+          open
+          onClose={onClose}
+          value={v}
+          onChange={setV}
+          suggestions={[{ label: 'meeting notes' }]}
+        />
+      );
+    }
+    render(wrap(<Harness />));
+    expect(screen.getByRole('searchbox')).toHaveValue('mee');
+    fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+    expect(screen.getByRole('searchbox')).toHaveValue('');
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+    expect(onClose).toHaveBeenCalled();
   });
 });
 

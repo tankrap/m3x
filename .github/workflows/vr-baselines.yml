@@ -1,0 +1,24 @@
+name: Generate VR baselines (Linux)
+
+# Run manually after intentional visual changes, then commit the artifact
+# contents to tests/vr/__screenshots__/linux/.
+on:
+  workflow_dispatch:
+
+jobs:
+  baselines:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install chromium --with-deps
+      - run: pnpm test:vr --update-snapshots
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-baselines
+          path: tests/vr/__screenshots__/linux/

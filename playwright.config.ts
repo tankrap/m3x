@@ -13,7 +13,8 @@ import { defineConfig } from '@playwright/test';
  */
 export default defineConfig({
   testDir: 'tests/vr',
-  snapshotPathTemplate: '{testDir}/__screenshots__/{arg}{ext}',
+  // per-platform baselines: fonts render differently across OSes
+  snapshotPathTemplate: '{testDir}/__screenshots__/{platform}/{arg}{ext}',
   timeout: 60_000,
   expect: {
     toHaveScreenshot: {
@@ -26,11 +27,20 @@ export default defineConfig({
     deviceScaleFactor: 1,
     contextOptions: { reducedMotion: 'reduce' },
   },
-  webServer: {
-    command: 'pnpm --filter @m3x/playground dev',
-    env: { PORT: '5199' },
-    url: 'http://localhost:5199',
-    reuseExistingServer: true,
-    timeout: 60_000,
-  },
+  webServer: [
+    {
+      command: 'pnpm --filter @m3x/playground dev',
+      env: { PORT: '5199' },
+      url: 'http://localhost:5199',
+      reuseExistingServer: true,
+      timeout: 60_000,
+    },
+    {
+      command: 'pnpm --filter @m3x/gallery dev',
+      env: { PORT: '5198' },
+      url: 'http://localhost:5198',
+      reuseExistingServer: true,
+      timeout: 60_000,
+    },
+  ],
 });
