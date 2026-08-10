@@ -34,3 +34,6 @@ export { SegmentedButtons, type SegmentedButtonsProps, type SegmentSpec } from '
 export { RichTooltip, type RichTooltipProps } from './tooltip/RichTooltip';
 export { NavigationDrawer, type NavigationDrawerProps, type DrawerItemSpec } from './navigation-drawer/NavigationDrawer';
 export { Carousel, type CarouselProps, type CarouselItemSpec } from './carousel/Carousel';
+export { DatePicker, type DatePickerProps } from './date-picker/DatePicker';
+export { TimePicker, type TimePickerProps, type TimeValue } from './time-picker/TimePicker';
+export { SideSheet, type SideSheetProps } from './side-sheet/SideSheet';

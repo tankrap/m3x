@@ -1,0 +1,219 @@
+/* M3 date picker, time picker, side sheet — specs/pickers-sheets.md */
+
+/* ---- date picker (docked) ---------------------------------------------- */
+.m3x-date-picker {
+  width: 328px;
+  padding: 12px;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level3);
+}
+
+.m3x-date-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.m3x-date-picker__month {
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-emphasized-label-large-weight);
+}
+
+.m3x-date-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+  row-gap: 2px;
+}
+
+.m3x-date-picker__weekday {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+}
+
+.m3x-date-picker__day {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  transition:
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-date-picker__day:hover {
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-state-layer-opacity) * 100%),
+    transparent
+  );
+}
+
+.m3x-date-picker__day[data-today] {
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+  color: var(--md-sys-color-primary);
+}
+
+.m3x-date-picker__day[data-selected] {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  box-shadow: none;
+}
+
+/* ---- time picker (input) ----------------------------------------------- */
+.m3x-time-picker {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--md-sys-color-on-surface);
+}
+
+.m3x-time-picker__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.m3x-time-picker__field {
+  width: 96px;
+  height: 72px;
+  border: none;
+  text-align: center;
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  border-radius: var(--md-sys-shape-corner-small);
+  font-family: var(--md-sys-typescale-display-medium-font);
+  font-size: 40px;
+  caret-color: var(--md-sys-color-primary);
+  outline: none;
+}
+
+.m3x-time-picker__field:focus {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  box-shadow: inset 0 0 0 2px var(--md-sys-color-primary);
+}
+
+.m3x-time-picker__label {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+}
+
+.m3x-time-picker__separator {
+  font-family: var(--md-sys-typescale-display-medium-font);
+  font-size: 40px;
+  line-height: 72px;
+}
+
+.m3x-time-picker__period {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-small);
+  overflow: hidden;
+  height: 72px;
+}
+
+.m3x-time-picker__period button {
+  flex: 1;
+  width: 52px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+}
+
+.m3x-time-picker__period button + button {
+  border-top: 1px solid var(--md-sys-color-outline);
+}
+
+.m3x-time-picker__period button[data-selected] {
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+/* ---- side sheet --------------------------------------------------------- */
+.m3x-side-sheet {
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  flex-direction: column;
+  min-width: 256px;
+}
+
+.m3x-side-sheet--standing {
+  border-inline-start: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* keep the UA's hidden state — .m3x-side-sheet's display:flex would leak
+   closed dialogs into the layout otherwise */
+.m3x-side-sheet--modal:not([open]) {
+  display: none;
+}
+
+.m3x-side-sheet--modal {
+  border: none;
+  padding: 0;
+  margin: 0 0 0 auto;
+  height: 100vh;
+  max-height: 100vh;
+  border-radius: var(--md-sys-shape-corner-extra-large) 0 0
+    var(--md-sys-shape-corner-extra-large);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.m3x-side-sheet--modal::backdrop {
+  background: color-mix(in srgb, var(--md-sys-color-scrim, #000) 32%, transparent);
+}
+
+.m3x-side-sheet--modal[open] {
+  animation: m3x-side-sheet-in var(--md-sys-motion-duration-medium4)
+    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes m3x-side-sheet-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+.m3x-side-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding-inline: 24px 12px;
+}
+
+.m3x-side-sheet__title {
+  font-family: var(--md-sys-typescale-title-large-font);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: var(--md-sys-typescale-title-large-weight);
+}
+
+.m3x-side-sheet__content {
+  padding: 0 24px 24px;
+  overflow-y: auto;
+}

@@ -14,7 +14,7 @@ A React component library that faithfully implements **Material Design 3**, incl
 |---|---|
 | `@m3x/tokens` | Design tokens: dynamic color (HCT, all scheme variants), typography (incl. Expressive *emphasized* styles), shape (corner tokens + morphable shape library), elevation, state layers, **motion-physics spring tokens** |
 | `@m3x/primitives` | Shared behavior/visual primitives: `Ripple`, `FocusRing`, `Elevation`, `Icon`, spring solver + `useSpringValue`, shape morphing, `ThemeProvider` |
-| `@m3x/react` | Components — Phase 1: Button, IconButton, FAB / Extended FAB · Phase 2 (Expressive signature set): ButtonGroup (press "bump"), SplitButton, FabMenu, LoadingIndicator (shape-morph), Linear/CircularProgress (wavy), Docked/FloatingToolbar · Phase 3 (inputs): TextField, Checkbox, Radio, Switch, Slider (Expressive), Chips · Phase 4 (containment & navigation): Card, Dialog, Snackbar, Badge, Divider, Tabs, NavigationBar, TopAppBar, NavigationRail, Menu, List, Tooltip/RichTooltip, BottomSheet, SearchBar, SegmentedButtons, NavigationDrawer, Carousel |
+| `@m3x/react` | Components — Phase 1: Button, IconButton, FAB / Extended FAB · Phase 2 (Expressive signature set): ButtonGroup (press "bump"), SplitButton, FabMenu, LoadingIndicator (shape-morph), Linear/CircularProgress (wavy), Docked/FloatingToolbar · Phase 3 (inputs): TextField, Checkbox, Radio, Switch, Slider (Expressive), Chips · Phase 4 (containment & navigation): Card, Dialog, Snackbar, Badge, Divider, Tabs, NavigationBar, TopAppBar, NavigationRail, Menu, List, Tooltip/RichTooltip, BottomSheet, SearchBar, SegmentedButtons, NavigationDrawer, Carousel, DatePicker, TimePicker, SideSheet |
 | `@m3x/playground` | Vite demo app for eyeballing spec fidelity |
 | `@m3x/gallery` | Example sites (plan §6.5 composition validation): Gmail-style Mail, Docs-style Editor, media home, Settings — adaptive rail/bar via `useWindowSizeClass`, per-app dynamic color seeds. `pnpm --filter @m3x/gallery dev` |
 
@@ -49,6 +49,19 @@ import { Button } from '@m3x/react';
   <Button variant="filled" size="m" shape="round">Get started</Button>
 </ThemeProvider>
 ```
+
+## Releasing
+
+CI runs typecheck/tests/builds on every push ([ci.yml](.github/workflows/ci.yml)).
+Publishing to npm is tag-driven ([publish.yml](.github/workflows/publish.yml)):
+
+```bash
+git tag v0.1.0 && git push --tags
+```
+
+One-time setup: create the free `m3x` org on npmjs.com (or change the package
+scope), generate an automation token, and add it as the `NPM_TOKEN` repository
+secret on GitHub.
 
 ## Spec fidelity
 

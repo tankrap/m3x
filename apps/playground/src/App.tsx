@@ -43,6 +43,10 @@ import {
   RichTooltip,
   NavigationDrawer,
   Carousel,
+  DatePicker,
+  TimePicker,
+  SideSheet,
+  type TimeValue,
   type ButtonSize,
 } from '@m3x/react';
 
@@ -90,6 +94,9 @@ export function App() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const [railExpanded, setRailExpanded] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [pickedDate, setPickedDate] = React.useState<Date | null>(new Date(2026, 7, 9));
+  const [time, setTime] = React.useState<TimeValue>({ hour: 14, minute: 30 });
+  const [sideSheetOpen, setSideSheetOpen] = React.useState(false);
 
   const shape: ShapeName = SHAPE_NAMES[shapeIdx % SHAPE_NAMES.length]!;
 
@@ -462,6 +469,23 @@ export function App() {
                 }))}
               />
             </div>
+          </div>
+        </Section>
+
+        <Section title="Date & time pickers, side sheet">
+          <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+            <DatePicker value={pickedDate} onChange={setPickedDate} initialMonth={new Date(2026, 7, 1)} />
+            <TimePicker value={time} onChange={setTime} />
+            <Button variant="tonal" onClick={() => setSideSheetOpen(true)}>
+              Open side sheet
+            </Button>
+            <SideSheet title="Filters" modal open={sideSheetOpen} onClose={() => setSideSheetOpen(false)}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <Checkbox label="In stock only" defaultChecked />
+                <Checkbox label="Free shipping" />
+                <Slider aria-label="Max price" defaultValue={70} />
+              </div>
+            </SideSheet>
           </div>
         </Section>
 
