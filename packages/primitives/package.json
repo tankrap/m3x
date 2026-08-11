@@ -1,6 +1,6 @@
 {
   "name": "@ibx34/m3x-primitives",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shared M3 primitives: spring motion engine, Ripple, FocusRing, Elevation, Icon, ThemeProvider.",
   "license": "Apache-2.0",
   "repository": {
