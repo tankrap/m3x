@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Ripple } from '@tankmrap/m3x-primitives';
+import { Icon, Ripple } from '@ibx34/m3x-primitives';
 
 export interface ListProps extends React.HTMLAttributes<HTMLUListElement> {
   children: React.ReactNode;

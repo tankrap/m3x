@@ -6,7 +6,7 @@ import {
   SpringToken,
   MotionSchemeTokens,
   standardMotionScheme,
-} from '@tankmrap/m3x-tokens';
+} from '@ibx34/m3x-tokens';
 
 export type MotionFamily = keyof MotionSchemeTokens; // 'spatial' | 'effects'
 export type MotionSpeed = 'default' | 'fast' | 'slow';

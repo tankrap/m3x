@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FocusRing, Icon, Ripple } from '@tankmrap/m3x-primitives';
+import { FocusRing, Icon, Ripple } from '@ibx34/m3x-primitives';
 
 /* Shared chip chrome — specs/chips.md */
 

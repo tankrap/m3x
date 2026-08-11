@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon } from '@tankmrap/m3x-primitives';
+import { Icon } from '@ibx34/m3x-primitives';
 import {
   Divider,
   FabMenu,
@@ -9,7 +9,7 @@ import {
   ListItem,
   SearchBar,
   Snackbar,
-} from '@tankmrap/m3x';
+} from '@ibx34/m3x';
 
 const MAILS = [
   { from: 'Ali Connors', subject: 'Brunch this weekend?', preview: "I'll be in your neighborhood doing errands…", time: '10:31', unread: true, color: '#7C4DFF' },

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ThemeProvider } from '@tankmrap/m3x-primitives';
+import { ThemeProvider } from '@ibx34/m3x-primitives';
 import { Sidebar } from './desktop/Sidebar';
 import { NavBar } from './desktop/NavBar';
 import { Breadcrumbs } from './desktop/Breadcrumbs';

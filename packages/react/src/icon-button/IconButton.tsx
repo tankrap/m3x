@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FocusRing, Icon, Ripple } from '@tankmrap/m3x-primitives';
+import { FocusRing, Icon, Ripple } from '@ibx34/m3x-primitives';
 import { ButtonShape, ButtonSize } from '../button/sizes';
 import { chainHandlers, GroupPosition, usePressMorph } from '../button/usePressMorph';
 

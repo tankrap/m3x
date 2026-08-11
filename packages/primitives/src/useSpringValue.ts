@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { SpringToken } from '@tankmrap/m3x-tokens';
+import type { SpringToken } from '@ibx34/m3x-tokens';
 import { animateSpring, AnimationHandle } from './spring';
 import { useTheme, MotionFamily, MotionSpeed } from './ThemeProvider';
 

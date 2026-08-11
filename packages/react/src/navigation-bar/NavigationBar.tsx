@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Ripple, useSpringValue } from '@tankmrap/m3x-primitives';
+import { Icon, Ripple, useSpringValue } from '@ibx34/m3x-primitives';
 import { Badge } from '../badge/Badge';
 
 export interface NavigationBarItem {

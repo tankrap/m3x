@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { MorphShape, useTheme } from '@tankmrap/m3x-primitives';
-import type { ShapeName } from '@tankmrap/m3x-tokens';
+import { MorphShape, useTheme } from '@ibx34/m3x-primitives';
+import type { ShapeName } from '@ibx34/m3x-tokens';
 
 /** Compose LoadingIndicator's default shape sequence. */
 export const LOADING_SEQUENCE: ShapeName[] = [

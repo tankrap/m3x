@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ThemeProvider } from '@tankmrap/m3x-primitives';
+import { ThemeProvider } from '@ibx34/m3x-primitives';
 import { Button } from './Button';
 import { IconButton } from '../icon-button/IconButton';
 import { Fab, ExtendedFab } from '../fab/Fab';

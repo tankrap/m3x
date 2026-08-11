@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { ElevationLevel } from '@tankmrap/m3x-tokens';
+import type { ElevationLevel } from '@ibx34/m3x-tokens';
 
 /**
  * M3 elevation surface: absolutely-positioned shadow layer that inherits the

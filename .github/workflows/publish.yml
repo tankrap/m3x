@@ -1,13 +1,13 @@
 name: Publish to npm
 
-# Publishes @tankmrap/m3x, @tankmrap/m3x-tokens, @tankmrap/m3x-primitives.
+# Publishes @ibx34/m3x, @ibx34/m3x-tokens, @ibx34/m3x-primitives.
 #
 # Two ways to run it:
 #   1. Tag a release:            git tag v0.1.0 && git push --tags
 #   2. Manually from the Actions tab (workflow_dispatch) on any ref.
 #
 # Requires the NPM_TOKEN repository secret: an npm token with publish rights
-# for the tankmrap account (Granular Access Token with read/write packages,
+# for the ibx34 account (Granular Access Token with read/write packages,
 # or a classic Automation token).
 on:
   push:

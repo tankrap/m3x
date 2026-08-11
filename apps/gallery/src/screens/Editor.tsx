@@ -8,7 +8,7 @@ import {
   SplitButton,
   TopAppBar,
   Tooltip,
-} from '@tankmrap/m3x';
+} from '@ibx34/m3x';
 
 /** Docs-style pattern: app bar + floating format toolbar + page + docked bar. */
 export function EditorApp({ compact }: { compact: boolean }) {

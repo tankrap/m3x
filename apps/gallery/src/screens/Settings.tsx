@@ -11,7 +11,7 @@ import {
   Slider,
   Switch,
   TopAppBar,
-} from '@tankmrap/m3x';
+} from '@ibx34/m3x';
 
 /** Settings pattern: large app bar + grouped lists of controls. */
 export function SettingsApp({

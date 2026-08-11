@@ -12,9 +12,9 @@ A React component library that faithfully implements **Material Design 3**, incl
 
 | Package | Purpose |
 |---|---|
-| `@tankmrap/m3x-tokens` | Design tokens: dynamic color (HCT, all scheme variants), typography (incl. Expressive *emphasized* styles), shape (corner tokens + morphable shape library), elevation, state layers, **motion-physics spring tokens** |
-| `@tankmrap/m3x-primitives` | Shared behavior/visual primitives: `Ripple`, `FocusRing`, `Elevation`, `Icon`, spring solver + `useSpringValue`, shape morphing, `ThemeProvider` |
-| `@tankmrap/m3x` | Components — Phase 1: Button, IconButton, FAB / Extended FAB · Phase 2 (Expressive signature set): ButtonGroup (press "bump"), SplitButton, FabMenu, LoadingIndicator (shape-morph), Linear/CircularProgress (wavy), Docked/FloatingToolbar · Phase 3 (inputs): TextField, Checkbox, Radio, Switch, Slider (Expressive), Chips · Phase 4 (containment & navigation): Card, Dialog, Snackbar, Badge, Divider, Tabs, NavigationBar, TopAppBar, NavigationRail, Menu, List, Tooltip/RichTooltip, BottomSheet, SearchBar, SegmentedButtons, NavigationDrawer, Carousel, DatePicker, TimePicker, SideSheet · **Extras (beyond the M3 catalog)**: Text (typescale), Avatar, Select, ComboBox, SelectionCard, Banner, InlineAlert, Toasts (`useToast`), Sidebar, NavBar, Breadcrumbs — extras use extended success/warning/info tonal roles generated with the same HCT machinery. Inputs take `size` (s/m/l frames for TextField/Select/ComboBox, scaled Checkbox/Radio/Switch, spec slider tiers xs–l) |
+| `@ibx34/m3x-tokens` | Design tokens: dynamic color (HCT, all scheme variants), typography (incl. Expressive *emphasized* styles), shape (corner tokens + morphable shape library), elevation, state layers, **motion-physics spring tokens** |
+| `@ibx34/m3x-primitives` | Shared behavior/visual primitives: `Ripple`, `FocusRing`, `Elevation`, `Icon`, spring solver + `useSpringValue`, shape morphing, `ThemeProvider` |
+| `@ibx34/m3x` | Components — Phase 1: Button, IconButton, FAB / Extended FAB · Phase 2 (Expressive signature set): ButtonGroup (press "bump"), SplitButton, FabMenu, LoadingIndicator (shape-morph), Linear/CircularProgress (wavy), Docked/FloatingToolbar · Phase 3 (inputs): TextField, Checkbox, Radio, Switch, Slider (Expressive), Chips · Phase 4 (containment & navigation): Card, Dialog, Snackbar, Badge, Divider, Tabs, NavigationBar, TopAppBar, NavigationRail, Menu, List, Tooltip/RichTooltip, BottomSheet, SearchBar, SegmentedButtons, NavigationDrawer, Carousel, DatePicker, TimePicker, SideSheet · **Extras (beyond the M3 catalog)**: Text (typescale), Avatar, Select, ComboBox, SelectionCard, Banner, InlineAlert, Toasts (`useToast`), Sidebar, NavBar, Breadcrumbs — extras use extended success/warning/info tonal roles generated with the same HCT machinery. Inputs take `size` (s/m/l frames for TextField/Select/ComboBox, scaled Checkbox/Radio/Switch, spec slider tiers xs–l) |
 | `@m3x/playground` | Vite demo app for eyeballing spec fidelity |
 | `@m3x/gallery` | Example sites (plan §6.5 composition validation): Gmail-style Mail, Docs-style Editor, media home, Settings — adaptive rail/bar via `useWindowSizeClass`, per-app dynamic color seeds. `pnpm --filter @m3x/gallery dev` |
 
@@ -42,8 +42,8 @@ pnpm build      # publishable ESM+CJS+d.ts bundles + flattened styles.css per pa
 ```
 
 ```tsx
-import { ThemeProvider } from '@tankmrap/m3x-primitives';
-import { Button } from '@tankmrap/m3x';
+import { ThemeProvider } from '@ibx34/m3x-primitives';
+import { Button } from '@ibx34/m3x';
 
 <ThemeProvider seedColor="#6750A4" schemeVariant="tonalSpot" motionScheme="expressive">
   <Button variant="filled" size="m" shape="round">Get started</Button>
@@ -60,11 +60,11 @@ it manually from the Actions tab:
 git tag v0.1.0 && git push --tags
 ```
 
-One-time setup: on npmjs.com (account `tankmrap`) generate a Granular Access
+One-time setup: on npmjs.com (account `ibx34`) generate a Granular Access
 Token with read/write package rights, and add it as the `NPM_TOKEN` repository
 secret on GitHub (`gh secret set NPM_TOKEN --repo tankrap/m3x`). No org is
-needed — the packages publish under the personal `@tankmrap` scope as
-`@tankmrap/m3x`, `@tankmrap/m3x-tokens`, `@tankmrap/m3x-primitives`.
+needed — the packages publish under the personal `@ibx34` scope as
+`@ibx34/m3x`, `@ibx34/m3x-tokens`, `@ibx34/m3x-primitives`.
 
 ## Spec fidelity
 

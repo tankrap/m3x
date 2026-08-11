@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { animateSpring, AnimationHandle, Icon, Ripple, useTheme } from '@tankmrap/m3x-primitives';
+import { animateSpring, AnimationHandle, Icon, Ripple, useTheme } from '@ibx34/m3x-primitives';
 
 const REST_RADIUS = 12;
 const PRESSED_RADIUS = 24;

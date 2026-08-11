@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { ThemeProvider, useWindowSizeClass } from '@tankmrap/m3x-primitives';
-import { NavigationBar, NavigationRail, Switch } from '@tankmrap/m3x';
+import { ThemeProvider, useWindowSizeClass } from '@ibx34/m3x-primitives';
+import { NavigationBar, NavigationRail, Switch } from '@ibx34/m3x';
 import { MailApp } from './screens/Mail';
 import { EditorApp } from './screens/Editor';
 import { MediaApp } from './screens/Media';

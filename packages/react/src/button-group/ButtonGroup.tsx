@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSprings } from '@tankmrap/m3x-primitives';
+import { useSprings } from '@ibx34/m3x-primitives';
 import type { ButtonSize } from '../button/sizes';
 import type { GroupPosition } from '../button/usePressMorph';
 

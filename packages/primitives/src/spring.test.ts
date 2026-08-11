@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createSpring } from './spring';
 import { widthToSizeClass } from './useWindowSizeClass';
-import { expressiveMotionScheme, standardMotionScheme } from '@tankmrap/m3x-tokens';
+import { expressiveMotionScheme, standardMotionScheme } from '@ibx34/m3x-tokens';
 
 describe('window size classes', () => {
   it('maps widths to M3 breakpoints', () => {

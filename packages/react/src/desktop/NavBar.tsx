@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Ripple } from '@tankmrap/m3x-primitives';
+import { Ripple } from '@ibx34/m3x-primitives';
 
 export interface NavBarLinkSpec {
   id: string;
