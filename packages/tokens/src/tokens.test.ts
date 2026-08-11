@@ -11,6 +11,7 @@ import {
   cornerProgresses,
   shapeLibrary,
 } from './shape';
+import { chartPaletteIsValid, createChartPalette } from './chartPalette';
 import { getTypeStyle } from './typography';
 
 describe('color', () => {
@@ -73,6 +74,21 @@ describe('shape library', () => {
     for (const p of [...from, ...to]) {
       expect(Number.isFinite(p.x)).toBe(true);
       expect(Math.abs(p.x)).toBeLessThanOrEqual(1.001);
+    }
+  });
+
+  it('chart palettes snap to passing for arbitrary seeds in both modes', () => {
+    const seeds = [
+      '#6750A4', '#C4322F', '#006A60', '#0B57D0', '#7B4E7F',
+      '#B08800', '#00639B', '#8BC34A', '#FF00FF', '#404040',
+    ];
+    for (const seed of seeds) {
+      for (const dark of [false, true]) {
+        const surface = createColorScheme({ seedColor: seed, dark }).surface;
+        const palette = createChartPalette(seed, dark, surface);
+        expect(palette).toHaveLength(6);
+        expect(chartPaletteIsValid(palette, dark, surface), `${seed} ${dark ? 'dark' : 'light'}: ${palette.join(',')}`).toBe(true);
+      }
     }
   });
 

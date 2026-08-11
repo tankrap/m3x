@@ -100,6 +100,41 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+function ChartTile({
+  title,
+  span,
+  center = false,
+  children,
+}: {
+  title?: string;
+  span?: number;
+  center?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        gridColumn: span ? `span ${span}` : undefined,
+        background: 'var(--md-sys-color-surface-container-low)',
+        borderRadius: 16,
+        padding: '18px 20px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: center ? 'center' : 'flex-start',
+        gap: 10,
+        minWidth: 0,
+      }}
+    >
+      {title && (
+        <Text variant="titleSmall" color="on-surface-variant" style={{ alignSelf: 'flex-start' }}>
+          {title}
+        </Text>
+      )}
+      {children}
+    </div>
+  );
+}
+
 const row: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
@@ -683,76 +718,104 @@ export function App() {
         </Section>
 
         <Section title="Extras: charts">
-          <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-            <Gauge value={72} label="Air quality" aria-label="Air quality 72" />
-            <SegmentedArcGauge
-              aria-label="Storage"
-              total={128}
-              label="GB used"
-              legend
-              segments={[
-                { value: 41, label: 'Apps' },
-                { value: 22, label: 'Media' },
-                { value: 9, label: 'System' },
-              ]}
-            />
-            <PieChart
-              aria-label="Traffic sources"
-              label="sessions"
-              slices={[
-                { value: 4120, label: 'Direct' },
-                { value: 2870, label: 'Search' },
-                { value: 1560, label: 'Social' },
-                { value: 630, label: 'Email' },
-              ]}
-              children="9.2k"
-            />
-          </div>
-          <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'flex-start', marginTop: 24 }}>
-            <BarChart
-              aria-label="Weekly activity"
-              header={{
-                label: 'Earned this week',
-                format: (v) => `$${Math.round(v).toLocaleString()}`,
-                trailing: <Tag color="success" size="s">+14.8%</Tag>,
-              }}
-              data={[
-                { label: 'Mon', value: 3240 },
-                { label: 'Tue', value: 5220 },
-                { label: 'Wed', value: 4130 },
-                { label: 'Thu', value: 7810 },
-                { label: 'Fri', value: 6390 },
-                { label: 'Sat', value: 2260 },
-                { label: 'Sun', value: 1540 },
-              ]}
-            />
-            <LineChart
-              aria-label="Revenue"
-              legend
-              header={{ label: 'Revenue', format: (v) => `$${Math.round(v)}k` }}
-              labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']}
-              series={[
-                { label: 'This year', values: [12, 19, 14, 26, 30, 24, 38, 44] },
-                { label: 'Last year', values: [10, 12, 16, 14, 20, 22, 19, 26] },
-              ]}
-            />
-            <AreaChart
-              aria-label="Active users"
-              labels={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
-              series={[{ label: 'Users', values: [420, 380, 510, 470, 690, 810, 640] }]}
-            />
-          </div>
-          <div style={{ marginTop: 24 }}>
-            <ContributionChart
-              aria-label="Commits"
-              weeks={30}
-              endDate={new Date(2026, 7, 10)}
-              entries={Array.from({ length: 150 }, (_, i) => {
-                const d = new Date(2026, 7, 10);
-                d.setDate(d.getDate() - Math.floor((i * 37) % 200));
-                return { date: d, value: (i * 13) % 9 };
-              })}
-            />
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+              gap: 16,
+              maxWidth: 1060,
+              alignItems: 'stretch',
+            }}
+          >
+            <ChartTile title="Air quality" center>
+              <Gauge value={72} label="AQI" size={150} aria-label="Air quality 72" />
+            </ChartTile>
+            <ChartTile title="Storage" center>
+              <SegmentedArcGauge
+                aria-label="Storage"
+                total={128}
+                label="of 128 GB"
+                size={150}
+                legend
+                segments={[
+                  { value: 41, label: 'Apps' },
+                  { value: 22, label: 'Media' },
+                  { value: 9, label: 'System' },
+                ]}
+              />
+            </ChartTile>
+            <ChartTile title="Traffic sources" center>
+              <PieChart
+                aria-label="Traffic sources"
+                label="sessions"
+                size={150}
+                thickness={24}
+                slices={[
+                  { value: 4120, label: 'Direct' },
+                  { value: 2870, label: 'Search' },
+                  { value: 1560, label: 'Social' },
+                  { value: 630, label: 'Email' },
+                ]}
+                children="9.2k"
+              />
+            </ChartTile>
+            <ChartTile span={2}>
+              <BarChart
+                aria-label="Weekly activity"
+                width={460}
+                height={210}
+                header={{
+                  label: 'Earned this week',
+                  format: (v) => `$${Math.round(v).toLocaleString()}`,
+                  trailing: <Tag color="success" size="s">+14.8%</Tag>,
+                }}
+                data={[
+                  { label: 'Mon', value: 3240 },
+                  { label: 'Tue', value: 5220 },
+                  { label: 'Wed', value: 4130 },
+                  { label: 'Thu', value: 7810 },
+                  { label: 'Fri', value: 6390 },
+                  { label: 'Sat', value: 2260 },
+                  { label: 'Sun', value: 1540 },
+                ]}
+              />
+            </ChartTile>
+            <ChartTile span={2}>
+              <LineChart
+                aria-label="Revenue"
+                width={460}
+                height={210}
+                legend
+                header={{ label: 'Revenue', format: (v) => `$${Math.round(v)}k` }}
+                labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']}
+                series={[
+                  { label: 'This year', values: [12, 19, 14, 26, 30, 24, 38, 44] },
+                  { label: 'Last year', values: [10, 12, 16, 14, 20, 22, 19, 26] },
+                ]}
+              />
+            </ChartTile>
+            <ChartTile span={2}>
+              <AreaChart
+                aria-label="Active users"
+                width={460}
+                height={210}
+                header={{ label: 'Active users' }}
+                labels={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+                series={[{ label: 'Users', values: [420, 380, 510, 470, 690, 810, 640] }]}
+              />
+            </ChartTile>
+            <ChartTile title="Commits" span={2}>
+              <ContributionChart
+                aria-label="Commits"
+                weeks={24}
+                endDate={new Date(2026, 7, 10)}
+                entries={Array.from({ length: 150 }, (_, i) => {
+                  const d = new Date(2026, 7, 10);
+                  d.setDate(d.getDate() - Math.floor((i * 37) % 168));
+                  return { date: d, value: (i * 13) % 9 };
+                })}
+              />
+            </ChartTile>
           </div>
         </Section>
 

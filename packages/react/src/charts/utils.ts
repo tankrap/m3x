@@ -62,20 +62,16 @@ export function niceTicks(maxValue: number, count = 4): number[] {
   return ticks;
 }
 
-/** theme-derived categorical series palette */
-const SERIES_VARS = [
-  'var(--md-sys-color-primary)',
-  'var(--md-sys-color-tertiary)',
-  'var(--md-sys-color-secondary)',
-  'var(--m3x-color-info)',
-  'var(--m3x-color-success)',
-  'var(--m3x-color-warning)',
-  'var(--md-sys-color-error)',
-  'var(--md-sys-color-outline)',
-] as const;
+/**
+ * Validated categorical palette generated per-theme (--m3x-chart-1..6): fixed
+ * assignment order, CVD-checked, and distinct from the status roles. Per the
+ * dataviz rules a 7th series should fold into "Other" rather than get a new
+ * hue — the modulo is a rendering fallback, not an invitation.
+ */
+export const SERIES_SLOTS = 6;
 
 export function seriesColor(i: number): string {
-  return SERIES_VARS[i % SERIES_VARS.length]!;
+  return `var(--m3x-chart-${(i % SERIES_SLOTS) + 1})`;
 }
 
 export const fmt = (v: number): string =>

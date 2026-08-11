@@ -8,9 +8,8 @@
 }
 
 .m3x-chart__grid {
-  stroke: var(--md-sys-color-outline-variant);
+  stroke: color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
   stroke-width: 1;
-  stroke-dasharray: 2 4;
 }
 
 .m3x-chart__tick {
@@ -217,7 +216,7 @@
 
 .m3x-line-chart__line {
   fill: none;
-  stroke-width: 3;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1;
@@ -253,7 +252,7 @@
 .m3x-line-chart__dot {
   fill: currentColor;
   stroke: var(--md-sys-color-surface);
-  stroke-width: 2;
+  stroke-width: 2; /* 2px surface ring on overlapping marks */
 }
 
 .m3x-line-chart__pulse {

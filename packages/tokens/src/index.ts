@@ -5,3 +5,4 @@ export * from './motion';
 export * from './elevation';
 export * from './state';
 export * from './theme';
+export * from './chartPalette';

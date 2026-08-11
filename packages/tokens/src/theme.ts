@@ -4,6 +4,7 @@
  * `--md-sys-*` variables emitted here.
  */
 import { ColorScheme, ColorSchemeOptions, colorVar, createColorScheme, createExtendedScheme } from './color';
+import { createChartPalette } from './chartPalette';
 import {
   MotionSchemeName,
   MotionSchemeTokens,
@@ -61,6 +62,10 @@ export function createTheme(options: ThemeOptions): Theme {
   for (const [role, value] of Object.entries(createExtendedScheme(dark))) {
     cssVars[`--m3x-color-${role.replace(/([A-Z])/g, '-$1').toLowerCase()}`] = value;
   }
+  // categorical chart palette — validated (snap-to-passing) per seed + mode
+  createChartPalette(seedColor, dark, colors.surface).forEach((hex, i) => {
+    cssVars[`--m3x-chart-${i + 1}`] = hex;
+  });
   for (const [name, px] of Object.entries(cornerTokens)) {
     cssVars[`--md-sys-shape-corner-${kebab(name)}`] = `${px}px`;
   }

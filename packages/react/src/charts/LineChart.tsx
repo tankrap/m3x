@@ -168,7 +168,7 @@ export function LineChart({
                     key={i}
                     cx={p.x}
                     cy={p.y}
-                    r={3.5}
+                    r={4}
                     className="m3x-line-chart__point"
                     style={{ fill: color }}
                   />
