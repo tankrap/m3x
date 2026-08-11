@@ -7,9 +7,10 @@
   gap: 8px;
 }
 
-.m3x-chart__grid {
-  stroke: color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
-  stroke-width: 1;
+.m3x-chart,
+.m3x-gauge svg,
+.m3x-heatmap {
+  overflow: visible;
 }
 
 .m3x-chart__tick {
@@ -28,31 +29,48 @@
 .m3x-chart__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 16px;
-  margin: 8px 0 0;
+  gap: 6px 8px;
+  margin: 10px 0 0;
   padding: 0;
   list-style: none;
-  color: var(--md-sys-color-on-surface-variant);
   font-family: var(--md-sys-typescale-label-medium-font);
   font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
 }
 
-.m3x-chart__legend li {
+.m3x-chart__legend-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  height: 24px;
+  padding-inline: 8px 10px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: color-mix(in srgb, var(--_c) 14%, transparent);
+  color: var(--md-sys-color-on-surface);
+  transition:
+    background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+    opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-chart__legend-chip[data-active] {
+  background: color-mix(in srgb, var(--_c) 28%, transparent);
+}
+
+.m3x-chart__legend-chip[data-dimmed] {
+  opacity: 0.45;
 }
 
 .m3x-chart__legend-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: var(--md-sys-shape-corner-full);
+  background: var(--_c);
   flex-shrink: 0;
 }
 
 .m3x-chart__legend-value {
-  color: var(--md-sys-color-on-surface);
-  font-weight: var(--md-sys-typescale-emphasized-label-medium-weight);
+  color: var(--md-sys-color-on-surface-variant);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---- gauges + pie -------------------------------------------------------- */
@@ -100,15 +118,6 @@
 .m3x-gauge__value--segment[data-dimmed],
 .m3x-pie__slice[data-dimmed] {
   opacity: 0.35;
-}
-
-.m3x-chart__legend li {
-  transition: color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-}
-
-.m3x-chart__legend li[data-active] {
-  color: var(--md-sys-color-on-surface);
-  font-weight: var(--md-sys-typescale-emphasized-label-medium-weight, 600);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -243,10 +252,16 @@
   stroke-width: 1.5;
 }
 
-.m3x-line-chart__cursor {
-  stroke: var(--md-sys-color-outline);
-  stroke-width: 1;
-  stroke-dasharray: 4 4;
+.m3x-line-chart__value-pill rect {
+  fill: var(--md-sys-color-inverse-surface);
+  opacity: 0.92;
+}
+
+.m3x-line-chart__value-pill text {
+  fill: var(--md-sys-color-inverse-on-surface);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
 }
 
 .m3x-line-chart__dot {

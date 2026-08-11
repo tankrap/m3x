@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { arcPath, seriesColor } from './utils';
+import { cappedArcPath, seriesColor } from './utils';
+import { ChartLegend } from './ChartHeader';
 import { useCountUp } from './useCountUp';
 
 export interface PieSlice {
@@ -58,7 +59,7 @@ export function PieChart({
   let cursor = 0;
   const arcs = drawn.map((slice, i) => {
     const sweep = total > 0 ? (slice.value / total) * usable : 0;
-    const d = arcPath(c, c, r, cursor, Math.max(cursor + sweep, cursor + 0.5));
+    const d = cappedArcPath(c, c, r, cursor, Math.max(cursor + sweep, cursor + 0.5), stroke);
     cursor += sweep + effGap;
     return { ...slice, d, color: slice.color ?? seriesColor(i), pct: total ? slice.value / total : 0 };
   });
@@ -108,20 +109,15 @@ export function PieChart({
         )}
       </div>
       {legend && (
-        <ul className="m3x-chart__legend">
-          {arcs.map((a, i) => (
-            <li
-              key={i}
-              data-active={(interactive && i === active) || undefined}
-              onPointerEnter={() => setActiveIdx(i)}
-              onPointerLeave={() => setActiveIdx(null)}
-            >
-              <span className="m3x-chart__legend-dot" style={{ background: a.color }} />
-              {a.label}
-              <span className="m3x-chart__legend-value">{Math.round(a.pct * 100)}%</span>
-            </li>
-          ))}
-        </ul>
+        <ChartLegend
+          items={arcs.map((a) => ({
+            label: a.label,
+            color: a.color,
+            value: `${Math.round(a.pct * 100)}%`,
+          }))}
+          active={interactive ? active : null}
+          onActive={interactive ? setActiveIdx : undefined}
+        />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { arcPath, polar, seriesColor } from './utils';
+import { arcPath, cappedArcPath, polar, seriesColor } from './utils';
 import { useCountUp } from './useCountUp';
-import { useMounted } from './ChartHeader';
+import { ChartLegend, useMounted } from './ChartHeader';
 
 export interface GaugeProps {
   /** current value */
@@ -142,7 +142,7 @@ export function SegmentedArcGauge({
   let cursor = START;
   const arcs = drawn.map((seg, i) => {
     const sweep = (seg.value / denom) * usable;
-    const d = arcPath(c, c, r, cursor, Math.max(cursor + sweep, cursor + 0.5));
+    const d = cappedArcPath(c, c, r, cursor, Math.max(cursor + sweep, cursor + 0.5), thickness);
     cursor += sweep + gap;
     return { d, color: seg.color ?? seriesColor(i), label: seg.label, value: seg.value };
   });
@@ -194,22 +194,11 @@ export function SegmentedArcGauge({
         </div>
       </div>
       {legend && (
-        <ul className="m3x-chart__legend">
-          {arcs.map(
-            (a, i) =>
-              a.label && (
-                <li
-                  key={i}
-                  data-active={(interactive && i === active) || undefined}
-                  onPointerEnter={() => setActiveIdx(i)}
-                  onPointerLeave={() => setActiveIdx(null)}
-                >
-                  <span className="m3x-chart__legend-dot" style={{ background: a.color }} />
-                  {a.label}
-                </li>
-              ),
-          )}
-        </ul>
+        <ChartLegend
+          items={arcs.filter((a) => a.label).map((a) => ({ label: a.label, color: a.color }))}
+          active={interactive ? active : null}
+          onActive={interactive ? setActiveIdx : undefined}
+        />
       )}
     </div>
   );

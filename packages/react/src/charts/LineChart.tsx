@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChartHeader, ChartHeaderSpec, useActiveIndex, useMounted } from './ChartHeader';
+import { ChartHeader, ChartHeaderSpec, ChartLegend, useActiveIndex, useMounted } from './ChartHeader';
 import { fmt, linePath, niceTicks, Pt, seriesColor, smoothPath } from './utils';
 
 export interface LineSeries {
@@ -107,12 +107,9 @@ export function LineChart({
       >
         {showGrid &&
           ticks.map((t) => (
-            <g key={t}>
-              <line x1={PAD_LEFT} x2={width - PAD_RIGHT} y1={y(t)} y2={y(t)} className="m3x-chart__grid" />
-              <text x={PAD_LEFT - 6} y={y(t) + 3} className="m3x-chart__tick" textAnchor="end">
-                {fmt(t)}
-              </text>
-            </g>
+            <text key={t} x={PAD_LEFT - 6} y={y(t) + 3} className="m3x-chart__tick" textAnchor="end">
+              {fmt(t)}
+            </text>
           ))}
         {labels.map(
           (label, i) =>
@@ -129,15 +126,34 @@ export function LineChart({
               </text>
             ),
         )}
-        {interactive && active != null && (
-          <line
-            x1={x(active)}
-            x2={x(active)}
-            y1={PAD_TOP}
-            y2={baseline}
-            className="m3x-line-chart__cursor"
-          />
-        )}
+        {interactive && active != null && (() => {
+          // per-series value pills at the active index, staggered apart when
+          // points share a zone so close values stay distinguishable
+          const entries = series
+            .map((s, si) => ({ si, v: s.values[active], color: s.color ?? seriesColor(si) }))
+            .filter((e): e is { si: number; v: number; color: string } => e.v != null)
+            .map((e) => ({ ...e, dotY: y(e.v), labelY: y(e.v) - 14 }))
+            .sort((a, b) => a.dotY - b.dotY);
+          for (let k = 1; k < entries.length; k++) {
+            if (entries[k]!.labelY - entries[k - 1]!.labelY < 20) {
+              entries[k]!.labelY = entries[k - 1]!.labelY + 20;
+            }
+          }
+          const ax = x(active);
+          const flip = ax > width - 64;
+          return entries.map((e) => {
+            const text = fmt(e.v);
+            const w = 14 + text.length * 7;
+            const rx2 = flip ? ax - 10 - w : ax + 10;
+            return (
+              <g key={`pill-${e.si}`} className="m3x-line-chart__value-pill">
+                <rect x={rx2} y={e.labelY - 9} width={w} height={18} rx={9} />
+                <circle cx={rx2 + 8} cy={e.labelY} r={3} style={{ fill: e.color }} />
+                <text x={rx2 + 14} y={e.labelY + 3.5}>{text}</text>
+              </g>
+            );
+          });
+        })()}
         {series.map((s, si) => {
           const pts: Pt[] = s.values.map((v, i) => ({ x: x(i), y: y(v) }));
           const path = smooth ? smoothPath(pts) : linePath(pts);
@@ -184,14 +200,9 @@ export function LineChart({
         })}
       </svg>
       {legend && (
-        <ul className="m3x-chart__legend">
-          {series.map((s, i) => (
-            <li key={i}>
-              <span className="m3x-chart__legend-dot" style={{ background: s.color ?? seriesColor(i) }} />
-              {s.label}
-            </li>
-          ))}
-        </ul>
+        <ChartLegend
+          items={series.map((s, i) => ({ label: s.label, color: s.color ?? seriesColor(i) }))}
+        />
       )}
     </div>
   );

@@ -73,12 +73,56 @@ export function useActiveIndex(
   return { active, onPointerMove, onPointerLeave, onMouseMove: onPointerMove, onMouseLeave: onPointerLeave };
 }
 
+export interface LegendItem {
+  label: React.ReactNode;
+  color: string;
+  /** trailing value (e.g. a percentage) */
+  value?: React.ReactNode;
+}
+
+/** color-tinted tag chips shared by every chart legend */
+export function ChartLegend({
+  items,
+  active,
+  onActive,
+}: {
+  items: LegendItem[];
+  active?: number | null;
+  onActive?: (index: number | null) => void;
+}) {
+  return (
+    <ul className="m3x-chart__legend">
+      {items.map((item, i) => (
+        <li
+          key={i}
+          className="m3x-chart__legend-chip"
+          style={{ '--_c': item.color } as React.CSSProperties}
+          data-active={(active != null && i === active) || undefined}
+          data-dimmed={(active != null && i !== active) || undefined}
+          onPointerEnter={onActive ? () => onActive(i) : undefined}
+          onPointerLeave={onActive ? () => onActive(null) : undefined}
+        >
+          <span className="m3x-chart__legend-dot" />
+          {item.label}
+          {item.value != null && <span className="m3x-chart__legend-value">{item.value}</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** two-pass mount flag for CSS-transition entrance animations */
 export function useMounted(): boolean {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
+    // rAF gives the browser a painted "from" frame — but rAF is paused in
+    // hidden tabs, so a timeout fallback guarantees the final state anyway
     const raf = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(raf);
+    const timeout = window.setTimeout(() => setMounted(true), 80);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(timeout);
+    };
   }, []);
   return mounted;
 }

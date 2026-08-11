@@ -11,6 +11,30 @@ export function polar(cx: number, cy: number, r: number, angleDeg: number): Pt {
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
 }
 
+/** degrees consumed by one round line-cap at radius r (stroke bleed) */
+export function capDegrees(thickness: number, r: number): number {
+  return ((thickness / 2) / r) * (180 / Math.PI);
+}
+
+/**
+ * Arc path inset by the round-cap bleed on both ends, so adjacent capped arcs
+ * show a true visual gap instead of overlapping.
+ */
+export function cappedArcPath(
+  cx: number,
+  cy: number,
+  r: number,
+  startDeg: number,
+  endDeg: number,
+  thickness: number,
+): string {
+  const cap = capDegrees(thickness, r);
+  const mid = (startDeg + endDeg) / 2;
+  const a = Math.min(startDeg + cap, mid - 0.25);
+  const b = Math.max(endDeg - cap, mid + 0.25);
+  return arcPath(cx, cy, r, a, b);
+}
+
 /** open arc path between two clock angles (for stroked arcs) */
 export function arcPath(
   cx: number,

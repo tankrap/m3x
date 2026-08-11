@@ -99,12 +99,9 @@ export function BarChart({
       >
         {showGrid &&
           ticks.map((t) => (
-            <g key={t}>
-              <line x1={PAD_LEFT} x2={width - 4} y1={y(t)} y2={y(t)} className="m3x-chart__grid" />
-              <text x={PAD_LEFT - 6} y={y(t) + 3} className="m3x-chart__tick" textAnchor="end">
-                {fmt(t)}
-              </text>
-            </g>
+            <text key={t} x={PAD_LEFT - 6} y={y(t) + 3} className="m3x-chart__tick" textAnchor="end">
+              {fmt(t)}
+            </text>
           ))}
         {data.map((d, i) => {
           const h = Math.max(2, plotH * (d.value / yMax));
