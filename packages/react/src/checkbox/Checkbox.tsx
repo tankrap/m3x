@@ -8,6 +8,8 @@ export interface CheckboxProps
   error?: boolean;
   /** visible label text rendered after the control */
   label?: React.ReactNode;
+  /** control size: s 15dp, m 18dp (default), l 22dp box */
+  size?: 's' | 'm' | 'l';
 }
 
 /**
@@ -16,7 +18,7 @@ export interface CheckboxProps
  * Spec: specs/selection-controls.md
  */
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { indeterminate = false, error = false, label, className, disabled, ...rest },
+  { indeterminate = false, error = false, label, size = 'm', className, disabled, ...rest },
   ref,
 ) {
   const innerRef = React.useRef<HTMLInputElement>(null);
@@ -30,6 +32,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(functi
     <label
       className={[
         'm3x-checkbox',
+        `m3x-selection--${size}`,
         error ? 'm3x-checkbox--error' : undefined,
         disabled ? 'm3x-checkbox--disabled' : undefined,
         className,

@@ -63,10 +63,13 @@
   color: var(--md-sys-color-primary);
 }
 
+.m3x-selection--s { --m3x-ctrl: 15px; --m3x-ctrl-radio: 16px; --m3x-ctrl-dot: 8px; }
+.m3x-selection--l { --m3x-ctrl: 22px; --m3x-ctrl-radio: 24px; --m3x-ctrl-dot: 12px; }
+
 .m3x-checkbox__box {
   position: relative;
-  width: 18px;
-  height: 18px;
+  width: var(--m3x-ctrl, 18px);
+  height: var(--m3x-ctrl, 18px);
   border-radius: 2px;
   box-shadow: inset 0 0 0 2px var(--md-sys-color-on-surface-variant);
   background: transparent;
@@ -141,8 +144,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: var(--m3x-ctrl-radio, 20px);
+  height: var(--m3x-ctrl-radio, 20px);
   border-radius: var(--md-sys-shape-corner-full);
   box-shadow: inset 0 0 0 2px var(--md-sys-color-on-surface-variant);
   transition: box-shadow var(--md-sys-motion-duration-short2)
@@ -155,8 +158,8 @@
 }
 
 .m3x-radio__dot {
-  width: 10px;
-  height: 10px;
+  width: var(--m3x-ctrl-dot, 10px);
+  height: var(--m3x-ctrl-dot, 10px);
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--md-sys-color-primary);
   transform: scale(0);

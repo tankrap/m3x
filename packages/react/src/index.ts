@@ -47,3 +47,7 @@ export { ComboBox, type ComboBoxProps } from './select/ComboBox';
 export { SelectionCard, type SelectionCardProps } from './selection-card/SelectionCard';
 export { Banner, InlineAlert, type AlertSeverity } from './alert/Alert';
 export { ToastProvider, useToast, type ToastOptions, type ToastProviderProps } from './alert/Toast';
+export { Sidebar, type SidebarProps, type SidebarItemSpec, type SidebarSectionSpec } from './desktop/Sidebar';
+export { NavBar, type NavBarProps, type NavBarLinkSpec } from './desktop/NavBar';
+export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbSpec } from './desktop/Breadcrumbs';
+export type { FieldSize } from './text-field/TextField';

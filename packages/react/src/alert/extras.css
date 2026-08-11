@@ -48,7 +48,7 @@
    padding so the label's float math is unchanged — the chip row pads itself. */
 .m3x-select--tags .m3x-text-field__container {
   height: auto;
-  min-height: 56px;
+  min-height: var(--m3x-field-height, 56px);
 }
 
 .m3x-select--tags .m3x-text-field__content {
@@ -66,11 +66,20 @@
   padding-bottom: 8px;
 }
 
+.m3x-select--tags.m3x-text-field--filled.m3x-text-field--size-s .m3x-select__value {
+  padding-top: 19px;
+  padding-bottom: 3px;
+}
+
+.m3x-select--tags.m3x-text-field--filled.m3x-text-field--size-l .m3x-select__value {
+  padding-top: 32px;
+}
+
 .m3x-select__tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 32px;
+  height: var(--m3x-tag-height, 32px);
   padding-inline: 10px 4px;
   border-radius: var(--md-sys-shape-corner-small);
   background: var(--md-sys-color-secondary-container);
@@ -79,6 +88,41 @@
   font-size: var(--md-sys-typescale-label-large-size);
   font-weight: var(--md-sys-typescale-label-large-weight);
   white-space: nowrap;
+}
+
+/* inside a filled field the tonal chip melts into the container — use an
+   outlined chip on the surface color instead */
+.m3x-text-field--filled .m3x-select__tag {
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-outline-variant);
+}
+
+.m3x-text-field--filled .m3x-select__tag-remove:hover {
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-state-layer-opacity) * 100%),
+    transparent
+  );
+}
+
+/* tag + input sizing follows the field size */
+.m3x-text-field--size-s {
+  --m3x-tag-height: 24px;
+}
+
+.m3x-text-field--size-s .m3x-select__tag {
+  font-size: var(--md-sys-typescale-label-medium-size);
+  padding-inline: 8px 2px;
+}
+
+.m3x-text-field--size-s .m3x-combobox__tag-input {
+  height: 24px;
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+.m3x-text-field--size-l {
+  --m3x-tag-height: 36px;
 }
 
 .m3x-select__tag-remove {

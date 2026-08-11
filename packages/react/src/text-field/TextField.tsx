@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { Icon } from '@m3x/primitives';
 
+export type FieldSize = 's' | 'm' | 'l';
+
 export interface TextFieldProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
   variant?: 'filled' | 'outlined';
+  /** field frame size: s 40dp, m 56dp (default), l 64dp */
+  size?: FieldSize;
   label: string;
   supportingText?: string;
   error?: boolean;
@@ -24,6 +28,7 @@ export interface TextFieldProps
 export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
   {
     variant = 'filled',
+    size = 'm',
     label,
     supportingText,
     error = false,
@@ -58,6 +63,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(func
       className={[
         'm3x-text-field',
         `m3x-text-field--${variant}`,
+        `m3x-text-field--size-${size}`,
         error ? 'm3x-text-field--error' : undefined,
         disabled ? 'm3x-text-field--disabled' : undefined,
         className,

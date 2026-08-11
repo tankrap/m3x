@@ -55,6 +55,9 @@ import {
   InlineAlert,
   ToastProvider,
   useToast,
+  Sidebar,
+  NavBar,
+  Breadcrumbs,
   type TimeValue,
   type ButtonSize,
 } from '@m3x/react';
@@ -561,6 +564,105 @@ export function App() {
             />
             <SelectionCard mode="radio" name="pg-region" value="us" title="US region" icon="public" defaultChecked />
             <SelectionCard mode="radio" name="pg-region" value="eu" title="EU region" icon="public" />
+          </div>
+        </Section>
+
+        <Section title="Extras: input sizes">
+          <div style={{ ...row, alignItems: 'flex-end' }}>
+            <TextField label="Small" size="s" variant="outlined" />
+            <TextField label="Medium" variant="outlined" />
+            <TextField label="Large" size="l" variant="outlined" />
+            <Select
+              label="Small"
+              size="s"
+              defaultValue="a"
+              options={[{ value: 'a', label: 'Option A' }, { value: 'b', label: 'Option B' }]}
+            />
+          </div>
+          <div style={{ ...row, marginTop: 16, alignItems: 'center' }}>
+            <Checkbox label="s" size="s" defaultChecked />
+            <Checkbox label="m" defaultChecked />
+            <Checkbox label="l" size="l" defaultChecked />
+            <Radio name="pg-size" label="s" size="s" defaultChecked />
+            <Radio name="pg-size" label="l" size="l" />
+            <Switch size="s" defaultChecked aria-label="Small switch" />
+            <Switch defaultChecked aria-label="Medium switch" />
+            <Switch size="l" defaultChecked aria-label="Large switch" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 420, marginTop: 16 }}>
+            <Slider aria-label="xs slider" defaultValue={30} />
+            <Slider size="s" aria-label="s slider" defaultValue={45} />
+            <Slider size="m" aria-label="m slider" defaultValue={60} />
+            <Slider size="l" aria-label="l slider" defaultValue={75} />
+          </div>
+        </Section>
+
+        <Section title="Extras: desktop app chrome">
+          <NavBar
+            brand={<><Icon size={24} fill={1} style={{ color: 'var(--md-sys-color-primary)' }}>token</Icon> m3x studio</>}
+            links={[
+              { id: 'overview', label: 'Overview' },
+              { id: 'components', label: 'Components' },
+              { id: 'tokens', label: 'Tokens' },
+            ]}
+            actions={
+              <>
+                <IconButton icon="search" aria-label="Search" />
+                <Button variant="filled" size="s">Publish</Button>
+              </>
+            }
+            elevated
+          />
+          <div style={{ display: 'flex', height: 380, border: '1px solid var(--md-sys-color-outline-variant)', borderRadius: 16, overflow: 'hidden', marginTop: 12 }}>
+            <Sidebar
+              header={<Text variant="titleMedium" emphasized>Acme HQ</Text>}
+              sections={[
+                {
+                  items: [
+                    { id: 'home', label: 'Home', icon: 'home' },
+                    { id: 'inbox', label: 'Inbox', icon: 'inbox', badge: 12 },
+                    {
+                      id: 'projects',
+                      label: 'Projects',
+                      icon: 'folder',
+                      children: [
+                        { id: 'm3x', label: 'm3x' },
+                        { id: 'website', label: 'Website' },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  title: 'Workspace',
+                  items: [
+                    { id: 'members', label: 'Members', icon: 'group' },
+                    { id: 'billing', label: 'Billing', icon: 'credit_card', badge: 'Pro' },
+                  ],
+                },
+              ]}
+              defaultValue="m3x"
+              footer={
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <Avatar name="Justin H" size={32} />
+                  <Text variant="labelLarge">Justin</Text>
+                </div>
+              }
+            />
+            <div style={{ flex: 1, padding: 20, background: 'var(--md-sys-color-surface)' }}>
+              <Breadcrumbs
+                items={[
+                  { label: 'Home', icon: 'home', onClick: () => {} },
+                  { label: 'Projects', onClick: () => {} },
+                  { label: 'm3x' },
+                ]}
+              />
+              <Text variant="headlineSmall" emphasized style={{ marginTop: 12 }}>
+                m3x
+              </Text>
+              <Text variant="bodyMedium" color="on-surface-variant">
+                A desktop shell composed from Sidebar, NavBar and Breadcrumbs.
+              </Text>
+            </div>
           </div>
         </Section>
 

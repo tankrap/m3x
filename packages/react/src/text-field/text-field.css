@@ -11,10 +11,46 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 56px;
-  padding-inline: 16px;
-  gap: 16px;
+  height: var(--m3x-field-height, 56px);
+  padding-inline: var(--m3x-field-pad, 16px);
+  gap: var(--m3x-field-gap, 16px);
   cursor: text;
+}
+
+/* ---- sizes (s 40dp / m 56dp / l 64dp) ----------------------------------- */
+.m3x-text-field--size-s {
+  --m3x-field-height: 40px;
+  --m3x-field-pad: 12px;
+  --m3x-field-gap: 12px;
+  --m3x-field-font: var(--md-sys-typescale-body-medium-size);
+}
+
+.m3x-text-field--size-l {
+  --m3x-field-height: 64px;
+  --m3x-field-gap: 16px;
+  --m3x-field-font: var(--md-sys-typescale-body-large-size);
+}
+
+.m3x-text-field--size-s .m3x-text-field__input,
+.m3x-text-field--size-s .m3x-text-field__label,
+.m3x-text-field--size-s .m3x-select__value {
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+/* the small filled frame has no room for a resting label + floated label
+   stack — float to 4px and tuck the input */
+.m3x-text-field--filled.m3x-text-field--size-s:focus-within .m3x-text-field__label,
+.m3x-text-field--filled.m3x-text-field--size-s[data-populated] .m3x-text-field__label {
+  top: 3px;
+}
+
+.m3x-text-field--filled.m3x-text-field--size-s .m3x-text-field__input-row {
+  padding-top: 15px;
+  padding-bottom: 2px;
+}
+
+.m3x-text-field--filled.m3x-text-field--size-l .m3x-text-field__input-row {
+  padding-top: 24px;
 }
 
 /* ---- filled ------------------------------------------------------------ */

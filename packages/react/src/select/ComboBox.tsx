@@ -50,6 +50,7 @@ export function ComboBox({
   emptyMessage = 'No matches',
   label,
   variant = 'outlined',
+  size = 'm',
   disabled,
   error,
   supportingText,
@@ -173,6 +174,7 @@ export function ComboBox({
           'm3x-select--tags',
           'm3x-text-field',
           `m3x-text-field--${variant}`,
+          `m3x-text-field--size-${size}`,
           error ? 'm3x-text-field--error' : undefined,
           disabled ? 'm3x-text-field--disabled' : undefined,
         ]
@@ -256,6 +258,7 @@ export function ComboBox({
         {...fieldProps}
         label={label}
         variant={variant}
+        size={size}
         disabled={disabled}
         error={error}
         supportingText={supportingText}

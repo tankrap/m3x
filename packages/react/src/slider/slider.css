@@ -23,11 +23,22 @@
   cursor: default;
 }
 
+/* Expressive slider sizes (track heights 16/24/40/56 per spec) */
+.m3x-slider--size-s { --m3x-slider-track: 24px; }
+.m3x-slider--size-m { --m3x-slider-track: 40px; }
+.m3x-slider--size-l { --m3x-slider-track: 56px; }
+
+.m3x-slider--size-s,
+.m3x-slider--size-m,
+.m3x-slider--size-l {
+  height: max(44px, calc(var(--m3x-slider-track) + 12px));
+}
+
 .m3x-slider__track {
   position: absolute;
   top: 50%;
-  height: 16px;
-  margin-top: -8px;
+  height: var(--m3x-slider-track, 16px);
+  margin-top: calc(var(--m3x-slider-track, 16px) / -2);
   pointer-events: none;
 }
 
@@ -61,7 +72,7 @@
   top: 0;
   left: var(--_x);
   width: 4px;
-  height: 44px;
+  height: max(44px, calc(var(--m3x-slider-track, 16px) + 12px));
   transform: translateX(-50%);
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--md-sys-color-primary);

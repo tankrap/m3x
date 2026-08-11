@@ -13,6 +13,8 @@ interface SelectBaseProps {
   label?: string;
   placeholder?: string;
   variant?: 'filled' | 'outlined';
+  /** field frame size: s 40dp, m 56dp (default), l 64dp */
+  size?: 's' | 'm' | 'l';
   disabled?: boolean;
   error?: boolean;
   supportingText?: string;
@@ -49,6 +51,7 @@ export function Select(props: SelectProps) {
     label,
     placeholder = '',
     variant = 'outlined',
+    size = 'm',
     disabled = false,
     error = false,
     supportingText,
@@ -157,6 +160,7 @@ export function Select(props: SelectProps) {
         'm3x-select',
         `m3x-text-field`,
         `m3x-text-field--${variant}`,
+        `m3x-text-field--size-${size}`,
         tags ? 'm3x-select--tags' : undefined,
         error ? 'm3x-text-field--error' : undefined,
         disabled ? 'm3x-text-field--disabled' : undefined,
@@ -251,14 +255,9 @@ export function Select(props: SelectProps) {
                 onPointerEnter={() => setActive(i)}
                 onClick={() => toggle(opt)}
               >
-                {multiple && (
-                  <Icon size={20} className="m3x-select__option-checkbox">
-                    {isSelected ? 'check_box' : 'check_box_outline_blank'}
-                  </Icon>
-                )}
                 {opt.icon && <Icon size={20}>{opt.icon}</Icon>}
                 <span className="m3x-select__option-label">{opt.label}</span>
-                {!multiple && isSelected && <Icon size={20}>check</Icon>}
+                {isSelected && <Icon size={20}>check</Icon>}
               </li>
             );
           })}

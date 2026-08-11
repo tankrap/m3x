@@ -4,6 +4,8 @@ import { Ripple } from '@m3x/primitives';
 export interface RadioProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   label?: React.ReactNode;
+  /** control size: s 16dp, m 20dp (default), l 24dp ring */
+  size?: 's' | 'm' | 'l';
 }
 
 /**
@@ -11,12 +13,17 @@ export interface RadioProps
  * Spec: specs/selection-controls.md
  */
 export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(function Radio(
-  { label, className, disabled, ...rest },
+  { label, size = 'm', className, disabled, ...rest },
   ref,
 ) {
   return (
     <label
-      className={['m3x-radio', disabled ? 'm3x-radio--disabled' : undefined, className]
+      className={[
+        'm3x-radio',
+        `m3x-selection--${size}`,
+        disabled ? 'm3x-radio--disabled' : undefined,
+        className,
+      ]
         .filter(Boolean)
         .join(' ')}
     >

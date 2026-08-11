@@ -13,6 +13,8 @@ export interface SliderProps
   onChange?: (value: number) => void;
   /** show the value label while dragging/focused */
   valueLabel?: boolean | ((value: number) => React.ReactNode);
+  /** Expressive track size: xs 16dp (default), s 24dp, m 40dp, l 56dp */
+  size?: 'xs' | 's' | 'm' | 'l';
   'aria-label'?: string;
 }
 
@@ -31,6 +33,7 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(function S
     defaultValue,
     onChange,
     valueLabel = true,
+    size = 'xs',
     className,
     disabled,
     style,
@@ -50,7 +53,12 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(function S
 
   return (
     <div
-      className={['m3x-slider', disabled ? 'm3x-slider--disabled' : undefined, className]
+      className={[
+        'm3x-slider',
+        size !== 'xs' ? `m3x-slider--size-${size}` : undefined,
+        disabled ? 'm3x-slider--disabled' : undefined,
+        className,
+      ]
         .filter(Boolean)
         .join(' ')}
       style={{ '--_pct': pct, ...style } as React.CSSProperties}

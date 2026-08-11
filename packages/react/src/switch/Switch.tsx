@@ -6,11 +6,15 @@ export interface SwitchProps
   /** show check/close icons inside the thumb */
   icons?: boolean;
   label?: React.ReactNode;
+  /** track size: s 42×26, m 52×32 (default), l 62×38 */
+  size?: 's' | 'm' | 'l';
 }
 
-/** thumb geometry from specs/selection-controls.md */
+/** thumb geometry from specs/selection-controls.md (base = m, 52×32 track) */
 const THUMB_X = { unselected: 16, selected: 36 };
 const THUMB_SIZE = { bare: 16, withIcon: 24, selected: 24, pressed: 28 };
+const TRACK = { width: 52, height: 32 };
+const SIZE_SCALE = { s: 0.8125, m: 1, l: 1.1875 } as const;
 
 /**
  * M3 switch: 52×32 track, thumb springs position (`spatial.default`) and size
@@ -19,7 +23,7 @@ const THUMB_SIZE = { bare: 16, withIcon: 24, selected: 24, pressed: 28 };
  * Spec: specs/selection-controls.md
  */
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function Switch(
-  { icons = false, label, className, disabled, checked, defaultChecked, onChange, ...rest },
+  { icons = false, label, size = 'm', className, disabled, checked, defaultChecked, onChange, ...rest },
   ref,
 ) {
   const innerRef = React.useRef<HTMLInputElement>(null);
@@ -28,16 +32,20 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function S
   const [internalChecked, setInternalChecked] = React.useState(defaultChecked ?? false);
   const isChecked = checked ?? internalChecked;
   const [pressed, setPressed] = React.useState(false);
+  const k = SIZE_SCALE[size];
 
-  const thumbX = useSpringValue(isChecked ? THUMB_X.selected : THUMB_X.unselected, 'spatial');
+  const thumbX = useSpringValue(
+    (isChecked ? THUMB_X.selected : THUMB_X.unselected) * k,
+    'spatial',
+  );
   const thumbSize = useSpringValue(
-    pressed && !disabled
+    (pressed && !disabled
       ? THUMB_SIZE.pressed
       : isChecked
         ? THUMB_SIZE.selected
         : icons
           ? THUMB_SIZE.withIcon
-          : THUMB_SIZE.bare,
+          : THUMB_SIZE.bare) * k,
     'spatial',
     'fast',
   );
@@ -54,7 +62,11 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function S
       onPointerLeave={release}
       onPointerCancel={release}
     >
-      <span className="m3x-switch__track" data-selected={isChecked || undefined}>
+      <span
+        className="m3x-switch__track"
+        data-selected={isChecked || undefined}
+        style={size !== 'm' ? { width: TRACK.width * k, height: TRACK.height * k } : undefined}
+      >
         <input
           ref={innerRef}
           type="checkbox"
@@ -75,7 +87,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function S
         />
         <span
           className="m3x-switch__thumb-container"
-          style={{ transform: `translateX(${thumbX - 16}px)` }}
+          style={{ transform: `translateX(${thumbX - 16 * k}px)` }}
           aria-hidden="true"
         >
           <span className="m3x-switch__state-layer">
@@ -87,7 +99,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function S
             style={{ width: thumbSize, height: thumbSize }}
           >
             {icons && (
-              <Icon size={16} className="m3x-switch__icon">
+              <Icon size={Math.round(16 * k)} className="m3x-switch__icon">
                 {isChecked ? 'check' : 'close'}
               </Icon>
             )}
