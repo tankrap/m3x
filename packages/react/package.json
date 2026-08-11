@@ -20,7 +20,8 @@
   ],
   "files": [
     "dist",
-    "src"
+    "src",
+    "llms.txt"
   ],
   "publishConfig": {
     "main": "dist/index.cjs",
@@ -38,7 +39,7 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
-    "build": "tsup && pnpm run build:css",
+    "build": "tsup && pnpm run build:css && cp ../../llms.txt .",
     "build:css": "esbuild src/styles.css --bundle --outfile=dist/styles.css"
   },
   "dependencies": {

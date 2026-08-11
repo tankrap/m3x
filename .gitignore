@@ -6,3 +6,4 @@ playwright-report/
 .DS_Store
 coverage/
 .vite/
+packages/react/llms.txt

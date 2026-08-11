@@ -1,0 +1,246 @@
+# m3x — Material 3 Expressive for React (LLM implementation guide)
+
+> m3x is a React component library implementing Material Design 3 including the
+> M3 Expressive update: spec-faithful visuals, design tokens, and spring motion
+> physics. Packages: `@ibx34/m3x` (components), `@ibx34/m3x-primitives`
+> (ThemeProvider, Icon, spring engine), `@ibx34/m3x-tokens` (color/type/shape/
+> motion tokens). Apache-2.0. Not affiliated with Google.
+> Repo: https://github.com/tankrap/m3x
+
+This file teaches an LLM to build correct, idiomatic UIs with m3x. Follow it
+exactly; every export name below is real.
+
+## Setup (always required)
+
+```bash
+npm install @ibx34/m3x @ibx34/m3x-primitives @ibx34/m3x-tokens
+```
+
+```tsx
+import '@ibx34/m3x/styles.css'; // one flattened stylesheet, import once
+import { ThemeProvider } from '@ibx34/m3x-primitives';
+import { ToastProvider } from '@ibx34/m3x';
+
+<ThemeProvider seedColor="#6750A4" dark={false} motionScheme="expressive">
+  <ToastProvider>{/* app */}</ToastProvider>
+</ThemeProvider>
+```
+
+- ThemeProvider props: `seedColor` (any hex — every color in the app derives
+  from it), `dark` (boolean; dark mode is a full recomputed scheme, not a CSS
+  filter), `variant` ('tonalSpot' default | 'vibrant' | 'expressive' |
+  'neutral' | 'monochrome' | 'fidelity' | 'content'), `motionScheme`
+  ('expressive' default | 'standard'), `contrast`.
+- Fonts: load Roboto Flex and Material Symbols Outlined (Google Fonts) in the
+  host page `<head>`; icons are Material Symbols ligature names (e.g. "edit",
+  "arrow_back", "check_circle").
+- ToastProvider is required only if `useToast()` is used; put it inside
+  ThemeProvider at the root.
+- `prefers-reduced-motion` is honored automatically everywhere.
+
+## Non-negotiable rules
+
+1. NEVER hardcode colors. Use CSS custom properties from the theme:
+   `var(--md-sys-color-primary)`, `--md-sys-color-on-surface`,
+   `--md-sys-color-surface-container-low`, `--md-sys-color-outline-variant`,
+   etc. Extended (beyond-spec) roles exist as `--m3x-color-success`,
+   `--m3x-color-warning`, `--m3x-color-info` (+ `-container`, `on-` pairs).
+   Pair every container color with its `on-` color for text/icons.
+2. Typography via the `Text` component or `--md-sys-typescale-*` vars — never
+   raw font-size/weight values.
+3. Every IconButton/Fab/icon-only control MUST have `aria-label`.
+4. Do not wrap m3x components in your own motion libraries — motion is built
+   in and tuned by `motionScheme`.
+5. Modal surfaces (Dialog, FormDialog, MorphDialog, BottomSheet, SideSheet
+   modal, NavigationDrawer modal, SearchView) use the native <dialog>: focus
+   trap, Esc, scrim click, and background scroll-lock all come free. Control
+   them with `open` + `onClose` state; never build custom overlays.
+6. Charts color themselves from a validated per-theme palette; do NOT pass
+   colors unless you have a semantic reason. More than 6 series must be folded
+   into "Other" (never invent a 7th color).
+
+## Choosing the right component (M3 guidance)
+
+- Primary page action, floats over content → `Fab` / `ExtendedFab`. One per
+  screen. In-flow emphasis → `Button variant="filled"` (one per view), then
+  "tonal", "outlined", "elevated", "text" in descending emphasis.
+- Related-action clusters → `ButtonGroup` (standard = spaced with the press
+  "bump"; `connected` = capsule silhouette). Single-choice view switching →
+  `SegmentedButtons` or connected toggle group. Action + related menu →
+  `SplitButton`. FAB that expands into actions → `FabMenu`.
+- Transient confirmation → `Snackbar` (spec) or `useToast()` (stacking,
+  severities). Persistent page-level notice → `Banner`. Contextual inline
+  notice → `InlineAlert`. Requires a decision → `Dialog`. Collects input →
+  `FormDialog`. Multi-step flow in one modal → `MorphDialog`.
+- Navigation by window size (use `useWindowSizeClass()` from primitives:
+  'compact' | 'medium' | 'expanded' | 'large' | 'extraLarge'):
+  compact/medium → `NavigationBar` (bottom, 3–5 items); expanded+ →
+  `NavigationRail` (or `Sidebar` for desktop-app chrome); many destinations →
+  `NavigationDrawer`. Top of page → `TopAppBar` (mobile) or `NavBar`
+  (desktop-web). Path context → `Breadcrumbs`.
+- Free-text with suggestions → `SearchBar` (docked) / `SearchView`
+  (full-screen). Pick-one from a list → `Select`; type-to-filter → `ComboBox`;
+  multi with removable chips → `Select multiple tags` or `ComboBox multiple`.
+  Big tap-target choices (plans, options) → `SelectionCard`.
+- Short verification codes → `PinInput`. Dates → `DatePicker`; times →
+  `TimePicker`.
+- Content containers → `Card` ('elevated' | 'filled' | 'outlined'); rows of
+  content → `List`/`ListItem`; supplementary panel → `SideSheet`; mobile
+  actions/pickers → `BottomSheet`; media strips → `Carousel` (keyline morph
+  built in).
+
+## Component quick reference (import from '@ibx34/m3x')
+
+Buttons: `Button` (variant, size 'xs'–'xl', shape 'round'|'square', icon,
+toggle+selected/defaultSelected), `IconButton` (icon, variant
+'filled'|'tonal'|'outlined'|'standard', toggle), `Fab` (icon, size
+'baseline'|'medium'|'large', color 'primaryContainer'|'secondaryContainer'|
+'tertiaryContainer'|'primary'|'secondary'|'tertiary'), `ExtendedFab`
+(collapsed), `ButtonGroup` (connected, size), `SplitButton` (items),
+`FabMenu` (icon, items[{label,icon,onSelect}], aria-label).
+
+Communication: `LoadingIndicator` (shape-morphing, contained), `LinearProgress`
+/ `CircularProgress` (value 0–1 or indeterminate, `wavy`), `Badge` (count or
+dot; wrap children to anchor), `Tooltip` (content, wraps one element),
+`RichTooltip` (subhead, content, actions, persistent), `Snackbar` (open,
+onClose, message, actionLabel), `Banner`/`InlineAlert` (severity
+'info'|'success'|'warning'|'error', title, actions, onDismiss),
+`ToastProvider` + `useToast()` → `toast({message, severity, actionLabel,
+onAction, duration})`.
+
+Inputs (all take `size` 's'|'m'|'l' unless noted): `TextField` (label required,
+variant 'filled'|'outlined', supportingText, error+errorText, leadingIcon,
+trailingIcon, prefix/suffix, name), `Checkbox` (label, indeterminate, error),
+`Radio` (name groups), `Switch` (icons), `Slider` (min/max/step, valueLabel,
+size 'xs'|'s'|'m'|'l' = Expressive track tiers), `AssistChip`/`FilterChip`
+(selectable)/`InputChip` (onRemove)/`SuggestionChip`, `SegmentedButtons`
+(segments, multiSelect, value: string[]), `Select` (options[{value,label,
+icon,disabled}], label, multiple, tags, name → hidden inputs for forms),
+`ComboBox` (options, multiple = tag input, onSelect, filter), `SelectionCard`
+(mode 'checkbox'|'radio', icon, title, description — Expressive press morph),
+`PinInput` (length, mode 'numeric'|'alphanumeric', mask, groupSize,
+onComplete — paste distributes), `DatePicker` (value: Date, onChange,
+initialMonth), `TimePicker` (value {hour,minute}, onChange, hour12).
+
+Containment & navigation: `Card`, `Dialog` (open, onClose, icon, headline,
+actions), `FormDialog` (onSubmit(FormData); return false to stay open),
+`MorphDialog` (steps[{id,icon,headline,content,actions,width}], step —
+changing `step` spring-morphs the container), `BottomSheet`, `SideSheet`
+(modal, title), `Divider` (inset), `Tabs` (items, animated indicator),
+`NavigationBar`/`NavigationRail` (items[{id,label,icon,badge}], value,
+onChange; rail: expanded, header), `TopAppBar` (size 'small'|'medium'|'large',
+title, navigationIcon, actions, elevated), `Menu` (open, onClose, items,
+anchor 'bottom-start'|'bottom-end' — render inside position:relative wrapper),
+`List`/`ListItem` (headline, supportingText, leadingIcon/leading, trailing,
+onClick), `NavigationDrawer` (items incl {headline:true}/{divider:true},
+modal), `Carousel` (items[{key,label,image|node,onClick}], itemWidth),
+`SearchBar` (suggestions, trailing), `SearchView` (open, value, onChange).
+
+Desktop chrome: `Sidebar` (sections[{title,items}], nested children groups,
+collapsed rail mode, header/footer), `NavBar` (brand, links, actions,
+elevated), `Breadcrumbs` (items[{label,href|onClick,icon}]).
+
+Typography & identity: `Text` (variant 'displayLarge'…'labelSmall',
+emphasized, color="on-surface-variant" etc., as), `Avatar` (name → stable
+auto color + initials, src, size), `Tag` (color 'neutral'|'primary'|
+'secondary'|'tertiary'|'info'|'success'|'warning'|'error', dot, icon,
+size 's'|'m').
+
+Charts (pure SVG, theme palette, hover interactivity built in): `Gauge`
+(value, min/max, label, format), `SegmentedArcGauge` (segments[{value,label}],
+total, legend), `PieChart` (slices[{value,label}], thickness — matches gauges
+by default, legend w/ %), `BarChart` (data[{label,value}], header:{label,
+format,trailing} for the count-up hover headline, tracks, showValues),
+`LineChart`/`AreaChart` (series[{label,values}], labels, header, legend,
+smooth, showPoints), `ContributionChart` (entries[{date,value}], weeks,
+endDate — GitHub-style heatmap). All accept width/height/interactive/
+onActiveChange.
+
+Tables: `Table` (density 'compact'|'standard'|'comfortable', striped) +
+`TableHead/TableBody/TableRow/TableCell` (header, numeric), `DataTable`
+(columns[{key,header,sortable,numeric,render,width}], rows, rowKey,
+selectable, pageSize, defaultSort). Rich cells: compose `Avatar`, `Tag`,
+`IconButton`+`Menu` inside column `render`.
+
+From '@ibx34/m3x-primitives': `ThemeProvider`, `Icon` (Material Symbol name,
+size, fill 0|1), `useWindowSizeClass`, `useTheme` (reducedMotion, spring),
+`useSpringValue`, `MorphShape` (M3 shape library morphing), `Ripple`,
+`FocusRing`.
+
+## Canonical patterns
+
+Adaptive app shell:
+```tsx
+const sizeClass = useWindowSizeClass();
+const compact = sizeClass === 'compact' || sizeClass === 'medium';
+// compact → <NavigationBar items=… /> at bottom; else <NavigationRail/Sidebar />
+```
+
+Form in a dialog (native FormData; Select needs `name` to participate):
+```tsx
+<FormDialog open={open} onClose={close} headline="Create project"
+  onSubmit={(data) => api.create({ name: data.get('name'), region: data.get('region') })}>
+  <TextField label="Name" name="name" variant="outlined" required autoFocus />
+  <Select label="Region" name="region" defaultValue="us" options={[…]} />
+  <Checkbox label="Use template" name="template" defaultChecked />
+</FormDialog>
+```
+
+Multi-step modal (container morphs between steps):
+```tsx
+const [step, setStep] = useState('plan');
+<MorphDialog open={open} onClose={close} step={step} steps={[
+  { id: 'plan', headline: 'Choose a plan', width: 440, content: …, actions: <Button onClick={() => setStep('details')}>Continue</Button> },
+  { id: 'details', headline: 'Details', width: 380, content: …, actions: … },
+]} />
+```
+
+Dashboard tile (BoardUI-style hover headline):
+```tsx
+<BarChart data={weekly} header={{ label: 'Earned this week',
+  format: (v) => `$${Math.round(v).toLocaleString()}`,
+  trailing: <Tag color="success" size="s">+14.8%</Tag> }} />
+```
+
+Rich DataTable column:
+```tsx
+{ key: 'name', header: 'Member', sortable: true, render: (r) => (
+  <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+    <Avatar name={r.name} size={32} /> {r.name}
+  </span>
+)}
+```
+
+## M3 best practices the library expects you to follow
+
+- Color: `primary` for the single most important action; `secondary-container`
+  for selected/tonal states; `tertiary` for contrast accents; reserve
+  error/success/warning for status meaning only. Surfaces stack
+  surface → surface-container-low → -container → -high → -highest; use
+  `outline-variant` for hairlines.
+- One filled Button and at most one FAB per screen. Dialogs: max two text
+  actions (confirming action last). Navigation bar: 3–5 destinations.
+- Touch targets ≥ 48dp: components already guarantee this — do not shrink
+  them with custom CSS.
+- Text on images/gradients needs a scrim; prefer `Carousel`'s built-in label
+  scrim.
+- Dark mode: never restyle manually — flip ThemeProvider `dark` and every
+  component, chart, and extended color adapts (charts revalidate their palette
+  for the dark surface).
+- Adaptive: don't build separate mobile/desktop trees; branch on
+  `useWindowSizeClass` for navigation and density only.
+- Motion: pass `motionScheme="standard"` for calmer products; individual
+  components must not be given custom easings/durations.
+
+## Known pitfalls
+
+- `Menu` positions against its nearest `position: relative` ancestor — wrap
+  the trigger + Menu in one.
+- `Select`/`ComboBox` inside forms: set `name` (Select renders hidden inputs).
+- `useToast()` throws without a `ToastProvider` ancestor.
+- Charts: series beyond 6 reuse palette slots — fold extra series into
+  "Other" instead.
+- `DataTable` `rowKey` must be stable and unique; sorting is by `sortValue`
+  fallback `row[key]`.
+- SSR: components are client components ("use client" semantics); theme vars
+  render inline so there is no flash, but portals/dialogs need the client.

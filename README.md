@@ -66,6 +66,13 @@ secret on GitHub (`gh secret set NPM_TOKEN --repo tankrap/m3x`). No org is
 needed — the packages publish under the personal `@ibx34` scope as
 `@ibx34/m3x`, `@ibx34/m3x-tokens`, `@ibx34/m3x-primitives`.
 
+## For LLMs / AI coding agents
+
+[`llms.txt`](llms.txt) is a dense implementation guide (setup, the full export
+surface, component-choice guidance, canonical patterns, M3 best practices,
+pitfalls) intended to be pasted into an AI assistant's context — it also ships
+inside the `@ibx34/m3x` npm package.
+
 ## Spec fidelity
 
 Every component has a spec sheet in [`/specs`](specs/README.md) extracted from
