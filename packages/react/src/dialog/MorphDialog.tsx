@@ -93,13 +93,14 @@ export function MorphDialog({
   }, [step]);
 
   // measure the incoming step's natural size after paint — by then the
-  // dialog's showModal() has run, so the hidden measurer has real layout
+  // dialog's showModal() has run, so the hidden measurer has real layout.
+  // offsetHeight (not getBoundingClientRect) because the dialog's scale(0.9)
+  // entry animation would otherwise shrink first-open measurements.
   React.useEffect(() => {
     if (!open) return;
     const el = measureRef.current;
     if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (rect.height > 0) setSize({ w: currentWidth, h: Math.ceil(rect.height) });
+    if (el.offsetHeight > 0) setSize({ w: currentWidth, h: el.offsetHeight });
   }, [open, step, currentWidth, steps]);
 
   const renderStep = (s: MorphDialogStep, mode: 'live' | 'leaving' | 'measure') => (
