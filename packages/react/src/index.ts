@@ -60,6 +60,7 @@ export { Table, TableHead, TableBody, TableRow, TableCell, type TableProps, type
 export { DataTable, type DataTableProps, type DataTableColumn } from './table/DataTable';
 export { Tag, type TagProps, type TagColor } from './tag/Tag';
 export { FormDialog, type FormDialogProps } from './dialog/FormDialog';
+export { MorphDialog, type MorphDialogProps, type MorphDialogStep } from './dialog/MorphDialog';
 export { PinInput, type PinInputProps } from './pin-input/PinInput';
 export { useCountUp } from './charts/useCountUp';
 export type { ChartHeaderSpec } from './charts/ChartHeader';

@@ -63,6 +63,8 @@ export const Slider = React.forwardRef<HTMLInputElement, SliderProps>(function S
         .join(' ')}
       style={{ '--_pct': pct, ...style } as React.CSSProperties}
       data-dragging={dragging || undefined}
+      data-at-max={pct >= 0.995 || undefined}
+      data-at-min={pct <= 0.005 || undefined}
     >
       <input
         ref={ref}

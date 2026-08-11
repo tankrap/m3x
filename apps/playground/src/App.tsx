@@ -73,6 +73,7 @@ import {
   DataTable,
   Tag,
   FormDialog,
+  MorphDialog,
   PinInput,
   type TimeValue,
   type ButtonSize,
@@ -854,6 +855,7 @@ export function App() {
         <Section title="Extras: form dialog & pin input">
           <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'flex-start' }}>
             <FormDialogDemo />
+            <MorphDialogDemo />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <PinInput length={6} groupSize={3} autoFocus={false} aria-label="Verification code" />
               <PinInput length={4} mask defaultValue="12" aria-label="Masked PIN" />
@@ -1206,6 +1208,77 @@ function FormDialogDemo() {
         />
         <Checkbox label="Start from template" name="template" defaultChecked />
       </FormDialog>
+    </>
+  );
+}
+
+function MorphDialogDemo() {
+  const [open, setOpen] = React.useState(false);
+  const [step, setStep] = React.useState('plan');
+  const close = () => {
+    setOpen(false);
+    window.setTimeout(() => setStep('plan'), 300);
+  };
+  return (
+    <>
+      <Button variant="tonal" icon="auto_awesome" onClick={() => setOpen(true)}>
+        Morphing dialog
+      </Button>
+      <MorphDialog
+        open={open}
+        onClose={close}
+        step={step}
+        steps={[
+          {
+            id: 'plan',
+            icon: 'workspace_premium',
+            headline: 'Choose a plan',
+            width: 440,
+            content: (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <SelectionCard mode="radio" name="morph-plan" value="free" title="Free" description="For trying things out" defaultChecked />
+                <SelectionCard mode="radio" name="morph-plan" value="pro" title="Pro" description="Unlimited projects, priority support" />
+              </div>
+            ),
+            actions: (
+              <>
+                <Button variant="text" onClick={close}>Cancel</Button>
+                <Button variant="filled" onClick={() => setStep('details')}>Continue</Button>
+              </>
+            ),
+          },
+          {
+            id: 'details',
+            icon: 'badge',
+            headline: 'Workspace details',
+            width: 380,
+            content: (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <TextField label="Workspace name" variant="outlined" defaultValue="Acme HQ" />
+                <TextField label="Team size" variant="outlined" size="s" />
+              </div>
+            ),
+            actions: (
+              <>
+                <Button variant="text" onClick={() => setStep('plan')}>Back</Button>
+                <Button variant="filled" onClick={() => setStep('done')}>Create</Button>
+              </>
+            ),
+          },
+          {
+            id: 'done',
+            icon: 'celebration',
+            headline: 'All set!',
+            width: 320,
+            content: (
+              <Text variant="bodyMedium" color="on-surface-variant">
+                Your workspace is ready. Invite your team whenever you like.
+              </Text>
+            ),
+            actions: <Button variant="filled" onClick={close}>Done</Button>,
+          },
+        ]}
+      />
     </>
   );
 }

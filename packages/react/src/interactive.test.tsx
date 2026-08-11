@@ -8,6 +8,8 @@ import { Tag } from './tag/Tag';
 import { FormDialog } from './dialog/FormDialog';
 import { PinInput } from './pin-input/PinInput';
 import { TextField } from './text-field/TextField';
+import { MorphDialog } from './dialog/MorphDialog';
+import { Slider } from './slider/Slider';
 
 const wrap = (ui: React.ReactElement) => (
   <ThemeProvider seedColor="#6750A4">{ui}</ThemeProvider>
@@ -125,6 +127,40 @@ describe('FormDialog', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
     await new Promise((r) => setTimeout(r, 10));
     expect(onClose).not.toHaveBeenCalled();
+  });
+});
+
+describe('MorphDialog', () => {
+  const steps = [
+    { id: 'a', headline: 'Step A', content: <p>Alpha body</p> },
+    { id: 'b', headline: 'Step B', content: <p>Beta body</p> },
+  ];
+
+  it('renders the active step and morphs to the next', async () => {
+    dialogPolyfill();
+    const { rerender } = render(
+      wrap(<MorphDialog open onClose={() => {}} steps={steps} step="a" />),
+    );
+    expect(screen.getAllByText('Step A').length).toBeGreaterThan(0);
+    rerender(wrap(<MorphDialog open onClose={() => {}} steps={steps} step="b" />));
+    expect(screen.getAllByText('Beta body').length).toBeGreaterThan(0);
+    // outgoing step briefly overlays while the container morphs
+    expect(document.querySelector('.m3x-morph-dialog__step--leaving')).toBeTruthy();
+    await new Promise((r) => setTimeout(r, 260));
+    expect(document.querySelector('.m3x-morph-dialog__step--leaving')).toBeNull();
+  });
+});
+
+describe('Slider extremes', () => {
+  it('flags at-max / at-min so the track ends round off correctly', () => {
+    const { container, rerender } = render(wrap(<Slider aria-label="s" value={100} onChange={() => {}} />));
+    expect(container.querySelector('.m3x-slider')).toHaveAttribute('data-at-max');
+    rerender(wrap(<Slider aria-label="s" value={0} onChange={() => {}} />));
+    expect(container.querySelector('.m3x-slider')).toHaveAttribute('data-at-min');
+    rerender(wrap(<Slider aria-label="s" value={50} onChange={() => {}} />));
+    const el = container.querySelector('.m3x-slider')!;
+    expect(el).not.toHaveAttribute('data-at-max');
+    expect(el).not.toHaveAttribute('data-at-min');
   });
 });
 

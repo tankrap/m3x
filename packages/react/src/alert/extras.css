@@ -482,6 +482,68 @@
   width: 100%;
 }
 
+/* ---- morph dialog ----------------------------------------------------------- */
+.m3x-morph-dialog {
+  max-width: min(90vw, 640px);
+}
+
+.m3x-morph-dialog__viewport {
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.m3x-morph-dialog__step {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.m3x-morph-dialog__step--leaving {
+  position: absolute;
+  inset: 0 0 auto 0;
+  animation: m3x-morph-step-out 180ms var(--md-sys-motion-easing-emphasized-accelerate) forwards;
+  pointer-events: none;
+}
+
+.m3x-morph-dialog__step--entering {
+  animation: m3x-morph-step-in 260ms var(--md-sys-motion-easing-emphasized-decelerate) 60ms backwards;
+}
+
+@keyframes m3x-morph-step-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
+@keyframes m3x-morph-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+}
+
+.m3x-morph-dialog__measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  left: -9999px;
+  top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3x-morph-dialog__step--leaving,
+  .m3x-morph-dialog__step--entering {
+    animation: none;
+  }
+  .m3x-morph-dialog__step--leaving {
+    display: none;
+  }
+}
+
 /* ---- pin input -------------------------------------------------------------- */
 .m3x-pin-input {
   display: inline-flex;

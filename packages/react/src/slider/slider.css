@@ -5,7 +5,9 @@
   height: 44px;
   min-width: 120px;
   display: block;
-  --_x: calc(var(--_pct) * 100%);
+  /* handle-center travel is inset by half the handle so it never leaves the track */
+  --_x: calc(2px + var(--_pct) * (100% - 4px));
+  --_outer-r: calc(var(--m3x-slider-track, 16px) / 2);
 }
 
 .m3x-slider__input {
@@ -46,16 +48,43 @@
   left: 0;
   width: max(0px, calc(var(--_x) - 8px));
   background: var(--md-sys-color-primary);
-  border-radius: 8px 2px 2px 8px;
+  border-radius: var(--_outer-r) 2px 2px var(--_outer-r);
+}
+
+/* click/keyboard moves glide; live drags stay 1:1 */
+.m3x-slider:not([data-dragging]) .m3x-slider__track--active {
+  transition: width var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-slider[data-at-max] .m3x-slider__track--active {
+  border-radius: var(--_outer-r);
+  width: 100%;
+}
+
+.m3x-slider[data-at-min] .m3x-slider__track--active {
+  visibility: hidden;
 }
 
 .m3x-slider__track--inactive {
   left: min(100%, calc(var(--_x) + 8px));
   right: 0;
   background: var(--md-sys-color-secondary-container);
-  border-radius: 2px 8px 8px 2px;
+  border-radius: 2px var(--_outer-r) var(--_outer-r) 2px;
   display: flex;
   align-items: center;
+}
+
+.m3x-slider:not([data-dragging]) .m3x-slider__track--inactive {
+  transition: left var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-slider[data-at-max] .m3x-slider__track--inactive {
+  visibility: hidden;
+}
+
+.m3x-slider[data-at-min] .m3x-slider__track--inactive {
+  border-radius: var(--_outer-r);
+  left: 0;
 }
 
 .m3x-slider__stop {
@@ -78,6 +107,12 @@
   background: var(--md-sys-color-primary);
   pointer-events: none;
   transition: width var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-slider:not([data-dragging]) .m3x-slider__handle {
+  transition:
+    left var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate),
+    width var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
 }
 
 .m3x-slider[data-dragging] .m3x-slider__handle {
