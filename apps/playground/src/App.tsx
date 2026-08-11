@@ -71,6 +71,9 @@ import {
   TableRow,
   TableCell,
   DataTable,
+  Tag,
+  FormDialog,
+  PinInput,
   type TimeValue,
   type ButtonSize,
 } from '@ibx34/m3x';
@@ -708,21 +711,25 @@ export function App() {
           <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'flex-start', marginTop: 24 }}>
             <BarChart
               aria-label="Weekly activity"
-              showValues
+              header={{
+                label: 'Earned this week',
+                format: (v) => `$${Math.round(v).toLocaleString()}`,
+                trailing: <Tag color="success" size="s">+14.8%</Tag>,
+              }}
               data={[
-                { label: 'Mon', value: 34 },
-                { label: 'Tue', value: 52 },
-                { label: 'Wed', value: 41 },
-                { label: 'Thu', value: 78 },
-                { label: 'Fri', value: 63 },
-                { label: 'Sat', value: 22 },
-                { label: 'Sun', value: 15 },
+                { label: 'Mon', value: 3240 },
+                { label: 'Tue', value: 5220 },
+                { label: 'Wed', value: 4130 },
+                { label: 'Thu', value: 7810 },
+                { label: 'Fri', value: 6390 },
+                { label: 'Sat', value: 2260 },
+                { label: 'Sun', value: 1540 },
               ]}
             />
             <LineChart
               aria-label="Revenue"
               legend
-              showPoints
+              header={{ label: 'Revenue', format: (v) => `$${Math.round(v)}k` }}
               labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']}
               series={[
                 { label: 'This year', values: [12, 19, 14, 26, 30, 24, 38, 44] },
@@ -776,27 +783,19 @@ export function App() {
                 </TableBody>
               </Table>
             </div>
-            <div style={{ minWidth: 420, flex: 1, maxWidth: 620 }}>
-              <DataTable
-                aria-label="Team"
-                selectable
-                pageSize={4}
-                defaultSort={{ key: 'commits', direction: 'desc' }}
-                rowKey={(r) => r.id}
-                columns={[
-                  { key: 'name', header: 'Member', sortable: true },
-                  { key: 'role', header: 'Role' },
-                  { key: 'commits', header: 'Commits', sortable: true, numeric: true },
-                ]}
-                rows={[
-                  { id: '1', name: 'Ali Connors', role: 'Design', commits: 214 },
-                  { id: '2', name: 'Sandra Adams', role: 'Engineering', commits: 431 },
-                  { id: '3', name: 'Peter Carlsson', role: 'Engineering', commits: 388 },
-                  { id: '4', name: 'Trevor Hansen', role: 'PM', commits: 96 },
-                  { id: '5', name: 'Britta Holt', role: 'Engineering', commits: 502 },
-                  { id: '6', name: 'Mary Johnson', role: 'Research', commits: 158 },
-                ]}
-              />
+            <div style={{ minWidth: 560, flex: 1, maxWidth: 760 }}>
+              <TeamTable />
+            </div>
+          </div>
+        </Section>
+
+        <Section title="Extras: form dialog & pin input">
+          <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <FormDialogDemo />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <PinInput length={6} groupSize={3} autoFocus={false} aria-label="Verification code" />
+              <PinInput length={4} mask defaultValue="12" aria-label="Masked PIN" />
+              <PinInput length={4} error defaultValue="9021" aria-label="Wrong PIN" />
             </div>
           </div>
         </Section>
@@ -1028,6 +1027,124 @@ export function App() {
       </div>
       </ToastProvider>
     </ThemeProvider>
+  );
+}
+
+const TEAM = [
+  { id: '1', name: 'Ali Connors', role: 'Design', status: 'active', commits: 214 },
+  { id: '2', name: 'Sandra Adams', role: 'Engineering', status: 'active', commits: 431 },
+  { id: '3', name: 'Peter Carlsson', role: 'Engineering', status: 'away', commits: 388 },
+  { id: '4', name: 'Trevor Hansen', role: 'PM', status: 'inactive', commits: 96 },
+  { id: '5', name: 'Britta Holt', role: 'Engineering', status: 'active', commits: 502 },
+  { id: '6', name: 'Mary Johnson', role: 'Research', status: 'away', commits: 158 },
+];
+
+const STATUS_COLOR = { active: 'success', away: 'warning', inactive: 'neutral' } as const;
+
+function RowActions({ name }: { name: string }) {
+  const [open, setOpen] = React.useState(false);
+  const { toast } = useToast();
+  return (
+    <div style={{ display: 'flex', gap: 2, justifyContent: 'flex-end', position: 'relative' }}>
+      <IconButton icon="edit" aria-label={`Edit ${name}`} onClick={() => toast(`Editing ${name}`)} />
+      <IconButton icon="more_vert" aria-label={`More for ${name}`} onClick={() => setOpen((o) => !o)} />
+      <Menu
+        open={open}
+        onClose={() => setOpen(false)}
+        anchor="bottom-end"
+        aria-label={`Actions for ${name}`}
+        items={[
+          { label: 'View profile', leadingIcon: 'person' },
+          { label: 'Change role', leadingIcon: 'badge' },
+          { divider: true, label: '' },
+          { label: 'Remove', leadingIcon: 'person_remove' },
+        ]}
+      />
+    </div>
+  );
+}
+
+function TeamTable() {
+  return (
+    <DataTable
+      aria-label="Team"
+      selectable
+      pageSize={4}
+      defaultSort={{ key: 'commits', direction: 'desc' }}
+      rowKey={(r) => r.id}
+      columns={[
+        {
+          key: 'name',
+          header: 'Member',
+          sortable: true,
+          render: (r) => (
+            <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <Avatar name={r.name} size={32} />
+              {r.name}
+            </span>
+          ),
+        },
+        {
+          key: 'role',
+          header: 'Role',
+          render: (r) => <Tag color={r.role === 'Engineering' ? 'primary' : 'secondary'} size="s">{r.role}</Tag>,
+        },
+        {
+          key: 'status',
+          header: 'Status',
+          render: (r) => (
+            <Tag color={STATUS_COLOR[r.status as keyof typeof STATUS_COLOR]} dot size="s">
+              {r.status}
+            </Tag>
+          ),
+        },
+        { key: 'commits', header: 'Commits', sortable: true, numeric: true },
+        {
+          key: 'actions',
+          header: '',
+          width: 110,
+          render: (r) => <RowActions name={r.name} />,
+        },
+      ]}
+      rows={TEAM}
+    />
+  );
+}
+
+function FormDialogDemo() {
+  const [open, setOpen] = React.useState(false);
+  const { toast } = useToast();
+  return (
+    <>
+      <Button variant="filled" icon="add" onClick={() => setOpen(true)}>
+        New project
+      </Button>
+      <FormDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        icon="rocket_launch"
+        headline="Create project"
+        description="Projects group related boards, docs and automations."
+        submitLabel="Create"
+        onSubmit={(data) => {
+          toast({ message: `Created "${data.get('name')}" (${data.get('region')})`, severity: 'success' });
+        }}
+      >
+        <TextField label="Project name" name="name" variant="outlined" required autoFocus />
+        <TextField label="Description" name="description" variant="outlined" />
+        <Select
+          label="Region"
+          name="region"
+          options={[
+            { value: 'us', label: 'United States', icon: 'public' },
+            { value: 'eu', label: 'Europe', icon: 'public' },
+            { value: 'apac', label: 'Asia Pacific', icon: 'public' },
+          ]}
+          defaultValue="us"
+        />
+        <Checkbox label="Start from template" name="template" defaultChecked />
+      </FormDialog>
+    </>
   );
 }
 

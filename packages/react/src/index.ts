@@ -58,3 +58,8 @@ export { BarChart, type BarChartProps, type BarDatum } from './charts/BarChart';
 export { LineChart, AreaChart, type LineChartProps, type AreaChartProps, type LineSeries } from './charts/LineChart';
 export { Table, TableHead, TableBody, TableRow, TableCell, type TableProps, type TableRowProps, type TableCellProps } from './table/Table';
 export { DataTable, type DataTableProps, type DataTableColumn } from './table/DataTable';
+export { Tag, type TagProps, type TagColor } from './tag/Tag';
+export { FormDialog, type FormDialogProps } from './dialog/FormDialog';
+export { PinInput, type PinInputProps } from './pin-input/PinInput';
+export { useCountUp } from './charts/useCountUp';
+export type { ChartHeaderSpec } from './charts/ChartHeader';

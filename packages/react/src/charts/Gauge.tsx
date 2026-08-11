@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { arcPath, polar, seriesColor } from './utils';
+import { useCountUp } from './useCountUp';
+import { useMounted } from './ChartHeader';
 
 export interface GaugeProps {
   /** current value */
@@ -23,8 +25,8 @@ const SWEEP = 270;
 const START = -135;
 
 /**
- * M3-style gauge: a 270° rounded arc on a tonal track with an emphasized
- * center numeral. Extras component.
+ * M3-style gauge: a 270° rounded arc that sweeps in on mount, tonal track,
+ * count-up center numeral. Extras component.
  */
 export function Gauge({
   value,
@@ -42,6 +44,8 @@ export function Gauge({
   const r = (size - thickness) / 2;
   const c = size / 2;
   const end = START + SWEEP * frac;
+  const mounted = useMounted();
+  const display = useCountUp(value);
 
   return (
     <div
@@ -62,14 +66,18 @@ export function Gauge({
         {frac > 0 && (
           <path
             d={arcPath(c, c, r, START, Math.max(end, START + 0.5))}
-            className="m3x-gauge__value"
+            className="m3x-gauge__value m3x-gauge__value--sweep"
+            data-mounted={mounted || undefined}
+            pathLength={1}
             style={{ stroke: color }}
             strokeWidth={thickness}
           />
         )}
       </svg>
       <div className="m3x-gauge__center">
-        <span className="m3x-gauge__number">{format ? format(value) : Math.round(value)}</span>
+        <span className="m3x-gauge__number">
+          {format ? format(display) : Math.round(display)}
+        </span>
         {label && <span className="m3x-gauge__label">{label}</span>}
       </div>
     </div>
@@ -95,13 +103,16 @@ export interface SegmentedArcGaugeProps {
   gap?: number;
   /** show a legend under the gauge */
   legend?: boolean;
+  /** hover: segment thickens + center swaps to its label/value (default true) */
+  interactive?: boolean;
+  onActiveChange?: (index: number | null) => void;
   className?: string;
   'aria-label'?: string;
 }
 
 /**
- * Segmented arc gauge: the 270° arc divided proportionally between series
- * with rounded caps and gaps (the Pixel storage-breakdown look).
+ * Segmented arc gauge: the 270° arc divided proportionally between series.
+ * Hovering a segment thickens it and swaps the center to that segment.
  * Extras component.
  */
 export function SegmentedArcGauge({
@@ -113,6 +124,8 @@ export function SegmentedArcGauge({
   thickness = 14,
   gap = 5,
   legend = false,
+  interactive = true,
+  onActiveChange,
   className,
   ...aria
 }: SegmentedArcGaugeProps) {
@@ -120,6 +133,7 @@ export function SegmentedArcGauge({
   const denom = total != null && total > 0 ? total : sum;
   const r = (size - thickness) / 2;
   const c = size / 2;
+  const [active, setActive] = React.useState<number | null>(null);
 
   const drawn = segments.filter((s) => s.value > 0);
   const gapCount = denom > sum ? drawn.length : Math.max(1, drawn.length);
@@ -130,10 +144,21 @@ export function SegmentedArcGauge({
     const sweep = (seg.value / denom) * usable;
     const d = arcPath(c, c, r, cursor, Math.max(cursor + sweep, cursor + 0.5));
     cursor += sweep + gap;
-    return { d, color: seg.color ?? seriesColor(i), label: seg.label };
+    return { d, color: seg.color ?? seriesColor(i), label: seg.label, value: seg.value };
   });
   // leftover track when a total is given
   const remainder = denom > sum ? arcPath(c, c, r, cursor, START + SWEEP) : null;
+
+  const setActiveIdx = (i: number | null) => {
+    if (!interactive) return;
+    setActive((prev) => {
+      if (prev !== i) onActiveChange?.(i);
+      return i;
+    });
+  };
+
+  const shown = active != null ? arcs[active] : null;
+  const centerValue = useCountUp(shown ? shown.value : sum);
 
   return (
     <div className={['m3x-gauge__wrap', className].filter(Boolean).join(' ')}>
@@ -143,7 +168,7 @@ export function SegmentedArcGauge({
         aria-label={aria['aria-label'] ?? 'Segmented gauge'}
         style={{ width: size, height: size }}
       >
-        <svg width={size} height={size} aria-hidden="true">
+        <svg width={size} height={size} aria-hidden="true" onPointerLeave={() => setActiveIdx(null)}>
           {remainder && (
             <path d={remainder} className="m3x-gauge__track" strokeWidth={thickness} />
           )}
@@ -151,15 +176,21 @@ export function SegmentedArcGauge({
             <path
               key={i}
               d={a.d}
-              className="m3x-gauge__value"
-              style={{ stroke: a.color }}
-              strokeWidth={thickness}
+              className="m3x-gauge__value m3x-gauge__value--segment"
+              data-active={(interactive && i === active) || undefined}
+              data-dimmed={(interactive && active != null && i !== active) || undefined}
+              style={{ stroke: a.color, strokeWidth: i === active ? thickness + 4 : thickness }}
+              onPointerEnter={() => setActiveIdx(i)}
             />
           ))}
         </svg>
         <div className="m3x-gauge__center">
-          <span className="m3x-gauge__number">{children ?? Math.round(sum)}</span>
-          {label && <span className="m3x-gauge__label">{label}</span>}
+          <span className="m3x-gauge__number">
+            {shown ? Math.round(centerValue) : (children ?? Math.round(centerValue))}
+          </span>
+          {(shown?.label || label) && (
+            <span className="m3x-gauge__label">{shown ? shown.label : label}</span>
+          )}
         </div>
       </div>
       {legend && (
@@ -167,7 +198,12 @@ export function SegmentedArcGauge({
           {arcs.map(
             (a, i) =>
               a.label && (
-                <li key={i}>
+                <li
+                  key={i}
+                  data-active={(interactive && i === active) || undefined}
+                  onPointerEnter={() => setActiveIdx(i)}
+                  onPointerLeave={() => setActiveIdx(null)}
+                >
                   <span className="m3x-chart__legend-dot" style={{ background: a.color }} />
                   {a.label}
                 </li>

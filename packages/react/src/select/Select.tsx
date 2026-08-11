@@ -15,6 +15,8 @@ interface SelectBaseProps {
   variant?: 'filled' | 'outlined';
   /** field frame size: s 40dp, m 56dp (default), l 64dp */
   size?: 's' | 'm' | 'l';
+  /** form participation: renders hidden input(s) with this name */
+  name?: string;
   disabled?: boolean;
   error?: boolean;
   supportingText?: string;
@@ -52,6 +54,7 @@ export function Select(props: SelectProps) {
     placeholder = '',
     variant = 'outlined',
     size = 'm',
+    name,
     disabled = false,
     error = false,
     supportingText,
@@ -264,6 +267,8 @@ export function Select(props: SelectProps) {
         </ul>
       )}
       {supportingText && <span className="m3x-text-field__supporting">{supportingText}</span>}
+      {name &&
+        selected.map((v) => <input key={v} type="hidden" name={name} value={v} />)}
     </div>
   );
 }

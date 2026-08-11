@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ChartHeader, ChartHeaderSpec, useActiveIndex, useMounted } from './ChartHeader';
 import { fmt, linePath, niceTicks, Pt, seriesColor, smoothPath } from './utils';
 
 export interface LineSeries {
@@ -18,6 +19,11 @@ export interface LineChartProps {
   showPoints?: boolean;
   showGrid?: boolean;
   legend?: boolean;
+  /** dashed hover cursor + pulsing dots + header swap (default true) */
+  interactive?: boolean;
+  /** BoardUI-style caption + count-up numeral above the chart (uses series[0]) */
+  header?: ChartHeaderSpec;
+  onActiveChange?: (index: number | null) => void;
   /** fill under each line (used by AreaChart) */
   area?: boolean;
   className?: string;
@@ -30,8 +36,9 @@ const PAD_TOP = 10;
 const PAD_RIGHT = 18;
 
 /**
- * M3-style line chart: smooth 3dp rounded strokes, subtle grid, theme palette,
- * optional area fill. Extras component.
+ * M3-style interactive line chart: smooth rounded strokes that draw in on
+ * mount, dashed hover cursor with pulsing dots, count-up header swap.
+ * Extras component.
  */
 export function LineChart({
   series,
@@ -42,6 +49,9 @@ export function LineChart({
   showPoints = false,
   showGrid = true,
   legend = false,
+  interactive = true,
+  header,
+  onActiveChange,
   area = false,
   className,
   ...aria
@@ -51,22 +61,49 @@ export function LineChart({
   const yMax = ticks[ticks.length - 1]!;
   const plotW = width - PAD_LEFT - PAD_RIGHT;
   const plotH = height - PAD_TOP - PAD_BOTTOM;
+  const mounted = useMounted();
 
   const x = (i: number) => PAD_LEFT + (plotW * i) / (n - 1);
   const y = (v: number) => PAD_TOP + plotH * (1 - v / yMax);
   const baseline = PAD_TOP + plotH;
+
+  const { active, onPointerMove, onPointerLeave, onMouseMove, onMouseLeave } = useActiveIndex(
+    n,
+    (px) => Math.round(((px - PAD_LEFT) / plotW) * (n - 1)),
+    onActiveChange,
+  );
+
+  const primarySeries = series[0];
+  const restingValue = primarySeries
+    ? primarySeries.values[primarySeries.values.length - 1]!
+    : 0;
 
   // thin the x labels when they'd collide
   const labelStride = Math.max(1, Math.ceil(labels.length / Math.floor(plotW / 48)));
 
   return (
     <div className={['m3x-chart__wrap', className].filter(Boolean).join(' ')}>
+      {header && (
+        <ChartHeader
+          spec={header}
+          restingValue={restingValue}
+          active={
+            active != null && primarySeries && primarySeries.values[active] != null
+              ? { label: labels[active] ?? `#${active + 1}`, value: primarySeries.values[active] }
+              : null
+          }
+        />
+      )}
       <svg
         className="m3x-chart m3x-line-chart"
         width={width}
         height={height}
         role="img"
         aria-label={aria['aria-label'] ?? 'Line chart'}
+        onPointerMove={interactive ? onPointerMove : undefined}
+        onPointerLeave={interactive ? onPointerLeave : undefined}
+        onMouseMove={interactive ? onMouseMove : undefined}
+        onMouseLeave={interactive ? onMouseLeave : undefined}
       >
         {showGrid &&
           ticks.map((t) => (
@@ -80,25 +117,49 @@ export function LineChart({
         {labels.map(
           (label, i) =>
             i % labelStride === 0 && (
-              <text key={i} x={x(i)} y={height - 6} className="m3x-chart__tick" textAnchor="middle">
+              <text
+                key={i}
+                x={x(i)}
+                y={height - 6}
+                className="m3x-chart__tick"
+                data-active={(interactive && i === active) || undefined}
+                textAnchor="middle"
+              >
                 {label}
               </text>
             ),
+        )}
+        {interactive && active != null && (
+          <line
+            x1={x(active)}
+            x2={x(active)}
+            y1={PAD_TOP}
+            y2={baseline}
+            className="m3x-line-chart__cursor"
+          />
         )}
         {series.map((s, si) => {
           const pts: Pt[] = s.values.map((v, i) => ({ x: x(i), y: y(v) }));
           const path = smooth ? smoothPath(pts) : linePath(pts);
           const color = s.color ?? seriesColor(si);
+          const activePt = active != null ? pts[active] : null;
           return (
             <g key={si}>
               {area && pts.length > 0 && (
                 <path
                   d={`${path} L ${pts[pts.length - 1]!.x.toFixed(2)} ${baseline} L ${pts[0]!.x.toFixed(2)} ${baseline} Z`}
                   className="m3x-line-chart__area"
+                  data-mounted={mounted || undefined}
                   style={{ fill: color }}
                 />
               )}
-              <path d={path} className="m3x-line-chart__line" style={{ stroke: color }}>
+              <path
+                d={path}
+                className="m3x-line-chart__line"
+                data-mounted={mounted || undefined}
+                pathLength={1}
+                style={{ stroke: color }}
+              >
                 <title>{s.label}</title>
               </path>
               {showPoints &&
@@ -112,6 +173,12 @@ export function LineChart({
                     style={{ fill: color }}
                   />
                 ))}
+              {interactive && activePt && (
+                <g className="m3x-line-chart__active-dot" style={{ color }}>
+                  <circle cx={activePt.x} cy={activePt.y} r={10} className="m3x-line-chart__pulse" />
+                  <circle cx={activePt.x} cy={activePt.y} r={4.5} className="m3x-line-chart__dot" />
+                </g>
+              )}
             </g>
           );
         })}

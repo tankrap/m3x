@@ -77,8 +77,46 @@
 .m3x-gauge__value {
   fill: none;
   stroke-linecap: round;
-  transition: stroke-dashoffset var(--md-sys-motion-duration-long2)
-    var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+/* mount sweep-in (single-value gauge) */
+.m3x-gauge__value--sweep {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 900ms var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-gauge__value--sweep[data-mounted] {
+  stroke-dashoffset: 0;
+}
+
+/* hover emphasis (segments + pie slices) */
+.m3x-gauge__value--segment,
+.m3x-pie__slice {
+  transition:
+    stroke-width var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+    opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-gauge__value--segment[data-dimmed],
+.m3x-pie__slice[data-dimmed] {
+  opacity: 0.35;
+}
+
+.m3x-chart__legend li {
+  transition: color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-chart__legend li[data-active] {
+  color: var(--md-sys-color-on-surface);
+  font-weight: var(--md-sys-typescale-emphasized-label-medium-weight, 600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3x-gauge__value--sweep {
+    transition: none;
+    stroke-dashoffset: 0;
+  }
 }
 
 .m3x-gauge__center {
@@ -116,17 +154,65 @@
   fill: none;
 }
 
+/* ---- chart header (BoardUI-style hover swap) ------------------------------ */
+.m3x-chart-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.m3x-chart-header__label {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+.m3x-chart-header__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.m3x-chart-header__value {
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-headline-medium-font);
+  font-size: var(--md-sys-typescale-headline-medium-size);
+  font-weight: var(--md-sys-typescale-emphasized-headline-medium-weight, 600);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
 /* ---- bar / line ----------------------------------------------------------- */
+.m3x-bar-chart__track {
+  fill: var(--md-sys-color-surface-container-highest);
+}
+
+.m3x-bar-chart__ring {
+  fill: none;
+  stroke: var(--md-sys-color-primary);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3x-bar-chart__ring[data-active] {
+  opacity: 0.75;
+}
+
 .m3x-bar-chart__bar {
-  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  transition:
+    y var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate),
+    height var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate),
+    filter var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
 }
 
-.m3x-bar-chart:hover .m3x-bar-chart__bar {
-  opacity: 0.55;
+.m3x-bar-chart__bar[data-active] {
+  filter: brightness(1.12) saturate(1.1);
 }
 
-.m3x-bar-chart .m3x-bar-chart__bar-group:hover .m3x-bar-chart__bar {
-  opacity: 1;
+.m3x-chart__tick[data-active] {
+  fill: var(--md-sys-color-on-surface);
+  font-weight: 600;
 }
 
 .m3x-line-chart__line {
@@ -134,16 +220,81 @@
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 900ms var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3x-line-chart__line[data-mounted] {
+  stroke-dashoffset: 0;
 }
 
 .m3x-line-chart__area {
-  opacity: 0.14;
+  opacity: 0;
   stroke: none;
+  transition: opacity 700ms var(--md-sys-motion-easing-standard) 250ms;
+}
+
+.m3x-line-chart__area[data-mounted] {
+  opacity: 0.14;
 }
 
 .m3x-line-chart__point {
   stroke: var(--md-sys-color-surface);
   stroke-width: 1.5;
+}
+
+.m3x-line-chart__cursor {
+  stroke: var(--md-sys-color-outline);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.m3x-line-chart__dot {
+  fill: currentColor;
+  stroke: var(--md-sys-color-surface);
+  stroke-width: 2;
+}
+
+.m3x-line-chart__pulse {
+  fill: currentColor;
+  opacity: 0.25;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: m3x-chart-pulse 1.4s var(--md-sys-motion-easing-standard) infinite;
+}
+
+@keyframes m3x-chart-pulse {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.35;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 0.08;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3x-line-chart__pulse {
+    animation: none;
+    opacity: 0.2;
+  }
+  .m3x-line-chart__line,
+  .m3x-line-chart__area,
+  .m3x-bar-chart__bar {
+    transition: none;
+  }
+  .m3x-line-chart__line {
+    stroke-dashoffset: 0;
+  }
+  .m3x-line-chart__area {
+    opacity: 0.14;
+  }
 }
 
 /* ---- heatmap -------------------------------------------------------------- */
@@ -165,6 +316,35 @@
 
 .m3x-heatmap__cell[data-level='4'] {
   fill: var(--md-sys-color-primary);
+}
+
+.m3x-heatmap__wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.m3x-heatmap__cell {
+  transition: stroke var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  stroke: transparent;
+  stroke-width: 1.5;
+}
+
+.m3x-heatmap__cell:hover {
+  stroke: var(--md-sys-color-primary);
+}
+
+.m3x-heatmap__tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 6px));
+  z-index: 10;
+  padding: 4px 8px;
+  background: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .m3x-heatmap__month,

@@ -101,7 +101,9 @@ describe('ContributionChart', () => {
     expect(cells.length).toBeGreaterThan(20);
     expect(container.querySelectorAll('[data-level="4"]')).toHaveLength(1);
     expect(container.querySelectorAll('[data-level="1"]')).toHaveLength(1);
-    expect(container.querySelector('[data-level="4"] title')?.textContent).toBe('2026-08-10: 8');
+    // hovering a cell shows the floating tooltip
+    fireEvent.pointerEnter(container.querySelector('[data-level="4"]')!);
+    expect(container.querySelector('.m3x-heatmap__tooltip')?.textContent).toBe('2026-08-10: 8');
   });
 });
 

@@ -67,6 +67,8 @@ export function ContributionChart({
     return Math.min(4, Math.max(1, Math.ceil((v / peak) * 4)));
   };
 
+  const [tip, setTip] = React.useState<{ x: number; y: number; text: string } | null>(null);
+
   const cells: React.ReactNode[] = [];
   const monthLabels: React.ReactNode[] = [];
   let lastMonth = -1;
@@ -77,12 +79,14 @@ export function ContributionChart({
       const date = new Date(end);
       date.setDate(end.getDate() - daysBack);
       const v = values.get(dayKey(date));
+      const cx = left + w * step;
+      const cy = top + d * step;
       if (d === 0) {
         const m = date.getMonth();
         if (m !== lastMonth && w < weeks - 1) {
           if (lastMonth !== -1 || w === 0) {
             monthLabels.push(
-              <text key={`m${w}`} x={left + w * step} y={10} className="m3x-heatmap__month">
+              <text key={`m${w}`} x={cx} y={10} className="m3x-heatmap__month">
                 {MONTHS[m]}
               </text>,
             );
@@ -93,40 +97,56 @@ export function ContributionChart({
       cells.push(
         <rect
           key={`${w}-${d}`}
-          x={left + w * step}
-          y={top + d * step}
+          x={cx}
+          y={cy}
           width={cellSize}
           height={cellSize}
           rx={3}
           className="m3x-heatmap__cell"
           data-level={level(v)}
-        >
-          <title>{formatTooltip(date, v ?? 0)}</title>
-        </rect>,
+          onPointerEnter={() =>
+            setTip({ x: cx + cellSize / 2, y: cy, text: formatTooltip(date, v ?? 0) })
+          }
+        />,
       );
     }
   }
 
   return (
-    <svg
-      className={['m3x-heatmap', className].filter(Boolean).join(' ')}
-      width={width}
-      height={height}
-      role="img"
-      aria-label={aria['aria-label'] ?? 'Contribution heatmap'}
+    <div
+      className={['m3x-heatmap__wrap', className].filter(Boolean).join(' ')}
+      style={{ width }}
+      onPointerLeave={() => setTip(null)}
     >
-      {monthLabels}
-      {DAY_LABELS.map((label, i) => (
-        <text
-          key={label}
-          x={0}
-          y={top + (1 + i * 2 + (firstDayOfWeek === 0 ? 0 : -1)) * step + cellSize - 2}
-          className="m3x-heatmap__day"
+      <svg
+        className="m3x-heatmap"
+        width={width}
+        height={height}
+        role="img"
+        aria-label={aria['aria-label'] ?? 'Contribution heatmap'}
+      >
+        {monthLabels}
+        {DAY_LABELS.map((label, i) => (
+          <text
+            key={label}
+            x={0}
+            y={top + (1 + i * 2 + (firstDayOfWeek === 0 ? 0 : -1)) * step + cellSize - 2}
+            className="m3x-heatmap__day"
+          >
+            {label}
+          </text>
+        ))}
+        {cells}
+      </svg>
+      {tip && (
+        <span
+          role="tooltip"
+          className="m3x-heatmap__tooltip"
+          style={{ left: tip.x, top: tip.y }}
         >
-          {label}
-        </text>
-      ))}
-      {cells}
-    </svg>
+          {tip.text}
+        </span>
+      )}
+    </div>
   );
 }
