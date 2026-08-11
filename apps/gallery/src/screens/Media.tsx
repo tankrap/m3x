@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon } from '@m3x/primitives';
+import { Icon } from '@tankmrap/m3x-primitives';
 import {
   AssistChip,
   Card,
@@ -8,7 +8,7 @@ import {
   IconButton,
   LinearProgress,
   LoadingIndicator,
-} from '@m3x/react';
+} from '@tankmrap/m3x';
 
 const GRADIENTS = [
   ['#7B4E7F', '#4A2C50'],

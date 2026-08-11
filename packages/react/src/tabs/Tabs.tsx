@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Ripple, useSprings } from '@m3x/primitives';
+import { Ripple, useSprings } from '@tankmrap/m3x-primitives';
 
 export interface TabItem {
   id: string;

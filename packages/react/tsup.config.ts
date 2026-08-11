@@ -7,5 +7,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: 'es2020',
-  external: ['react', 'react-dom', '@m3x/tokens', '@m3x/primitives'],
+  external: ['react', 'react-dom', '@tankmrap/m3x-tokens', '@tankmrap/m3x-primitives'],
 });

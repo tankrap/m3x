@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Ripple } from '@m3x/primitives';
+import { Ripple } from '@tankmrap/m3x-primitives';
 
 export interface CheckboxProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {

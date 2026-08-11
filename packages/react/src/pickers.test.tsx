@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ThemeProvider } from '@m3x/primitives';
+import { ThemeProvider } from '@tankmrap/m3x-primitives';
 import { DatePicker } from './date-picker/DatePicker';
 import { TimePicker, TimeValue } from './time-picker/TimePicker';
 import { SideSheet } from './side-sheet/SideSheet';

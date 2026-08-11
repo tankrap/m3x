@@ -8,7 +8,7 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: 'es2020',
-  external: ['react', 'react-dom', '@m3x/tokens'],
+  external: ['react', 'react-dom', '@tankmrap/m3x-tokens'],
   onSuccess: async () => {
     copyFileSync('src/styles.css', 'dist/styles.css');
   },

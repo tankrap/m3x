@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FocusRing, Icon, Ripple, useSpringValue } from '@m3x/primitives';
+import { FocusRing, Icon, Ripple, useSpringValue } from '@tankmrap/m3x-primitives';
 import { Button, ButtonVariant } from '../button/Button';
 import { ButtonSize, BUTTON_SIZES } from '../button/sizes';
 import { chainHandlers, usePressMorph } from '../button/usePressMorph';

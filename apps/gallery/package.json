@@ -9,9 +9,9 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@m3x/primitives": "workspace:*",
-    "@m3x/react": "workspace:*",
-    "@m3x/tokens": "workspace:*",
+    "@tankmrap/m3x-primitives": "workspace:*",
+    "@tankmrap/m3x": "workspace:*",
+    "@tankmrap/m3x-tokens": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

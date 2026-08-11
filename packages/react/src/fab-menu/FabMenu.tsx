@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FocusRing, Icon, Ripple, useSpringValue, useSprings } from '@m3x/primitives';
+import { FocusRing, Icon, Ripple, useSpringValue, useSprings } from '@tankmrap/m3x-primitives';
 import type { FabColor, FabSize } from '../fab/Fab';
 
 export interface FabMenuItem {

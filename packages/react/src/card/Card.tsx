@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FocusRing, Ripple } from '@m3x/primitives';
+import { FocusRing, Ripple } from '@tankmrap/m3x-primitives';
 
 export type CardVariant = 'elevated' | 'filled' | 'outlined';
 

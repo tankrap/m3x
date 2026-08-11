@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Ripple } from '@m3x/primitives';
+import { Icon, Ripple } from '@tankmrap/m3x-primitives';
 import { Badge } from '../badge/Badge';
 
 export interface DrawerItemSpec {

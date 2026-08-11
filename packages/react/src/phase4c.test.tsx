@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ThemeProvider } from '@m3x/primitives';
+import { ThemeProvider } from '@tankmrap/m3x-primitives';
 import { SearchBar } from './search/SearchBar';
 import { SearchView } from './search/SearchView';
 import { SegmentedButtons } from './segmented/SegmentedButtons';

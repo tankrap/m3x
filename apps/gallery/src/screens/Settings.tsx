@@ -11,7 +11,7 @@ import {
   Slider,
   Switch,
   TopAppBar,
-} from '@m3x/react';
+} from '@tankmrap/m3x';
 
 /** Settings pattern: large app bar + grouped lists of controls. */
 export function SettingsApp({

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSprings } from '@m3x/primitives';
+import { useSprings } from '@tankmrap/m3x-primitives';
 import { ButtonShape, ButtonSize, BUTTON_SIZES, restingRadius, morphTargetRadius } from './sizes';
 
 /** [top-left, top-right, bottom-right, bottom-left] px.

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, act } from '@testing-library/react';
-import { ThemeProvider } from '@m3x/primitives';
+import { ThemeProvider } from '@tankmrap/m3x-primitives';
 import { Button } from './button/Button';
 import { ButtonGroup } from './button-group/ButtonGroup';
 import { SplitButton } from './split-button/SplitButton';

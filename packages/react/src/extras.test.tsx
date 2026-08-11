@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { ThemeProvider } from '@m3x/primitives';
-import { createTheme } from '@m3x/tokens';
+import { ThemeProvider } from '@tankmrap/m3x-primitives';
+import { createTheme } from '@tankmrap/m3x-tokens';
 import { Text } from './text/Text';
 import { Avatar } from './avatar/Avatar';
 import { Select } from './select/Select';

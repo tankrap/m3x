@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { ThemeProvider, MorphShape, Icon } from '@m3x/primitives';
-import type { SchemeVariant, MotionSchemeName, ShapeName } from '@m3x/tokens';
-import { SHAPE_NAMES } from '@m3x/tokens';
+import { ThemeProvider, MorphShape, Icon } from '@tankmrap/m3x-primitives';
+import type { SchemeVariant, MotionSchemeName, ShapeName } from '@tankmrap/m3x-tokens';
+import { SHAPE_NAMES } from '@tankmrap/m3x-tokens';
 import {
   Button,
   IconButton,
@@ -60,7 +60,7 @@ import {
   Breadcrumbs,
   type TimeValue,
   type ButtonSize,
-} from '@m3x/react';
+} from '@tankmrap/m3x';
 
 const SIZES: ButtonSize[] = ['xs', 's', 'm', 'l', 'xl'];
 const VARIANTS = ['elevated', 'filled', 'tonal', 'outlined', 'text'] as const;

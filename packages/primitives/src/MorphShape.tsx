@@ -7,7 +7,7 @@ import {
   shapeLibrary,
   shapeOutline,
   ShapeName,
-} from '@m3x/tokens';
+} from '@tankmrap/m3x-tokens';
 import { animateSpring, AnimationHandle } from './spring';
 import { useTheme, MotionSpeed } from './ThemeProvider';
 

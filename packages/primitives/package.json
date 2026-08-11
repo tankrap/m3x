@@ -1,5 +1,5 @@
 {
-  "name": "@m3x/primitives",
+  "name": "@tankmrap/m3x-primitives",
   "version": "0.1.0",
   "description": "Shared M3 primitives: spring motion engine, Ripple, FocusRing, Elevation, Icon, ThemeProvider.",
   "license": "Apache-2.0",
@@ -38,7 +38,7 @@
     "build": "tsup"
   },
   "dependencies": {
-    "@m3x/tokens": "workspace:*"
+    "@tankmrap/m3x-tokens": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

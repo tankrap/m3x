@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import '@m3x/react/styles.css';
+import '@tankmrap/m3x/styles.css';
 import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(

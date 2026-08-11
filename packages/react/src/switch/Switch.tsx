@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, Ripple, useSpringValue } from '@m3x/primitives';
+import { Icon, Ripple, useSpringValue } from '@tankmrap/m3x-primitives';
 
 export interface SwitchProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'role'> {

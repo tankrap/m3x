@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FocusRing, Icon, Ripple } from '@m3x/primitives';
+import { FocusRing, Icon, Ripple } from '@tankmrap/m3x-primitives';
 
 export type FabSize = 'baseline' | 'medium' | 'large';
 /** Expressive color styles (audited 2026-08-09): container styles are the

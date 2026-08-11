@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useTheme } from '@m3x/primitives';
+import { useTheme } from '@tankmrap/m3x-primitives';
 
 export interface CircularProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   /** 0..1; omit for indeterminate (prefer LoadingIndicator for that) */

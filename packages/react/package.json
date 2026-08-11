@@ -1,5 +1,5 @@
 {
-  "name": "@m3x/react",
+  "name": "@tankmrap/m3x",
   "version": "0.1.0",
   "description": "Material 3 Expressive components for React. Not affiliated with or endorsed by Google.",
   "license": "Apache-2.0",
@@ -42,8 +42,8 @@
     "build:css": "esbuild src/styles.css --bundle --outfile=dist/styles.css"
   },
   "dependencies": {
-    "@m3x/primitives": "workspace:*",
-    "@m3x/tokens": "workspace:*"
+    "@tankmrap/m3x-primitives": "workspace:*",
+    "@tankmrap/m3x-tokens": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

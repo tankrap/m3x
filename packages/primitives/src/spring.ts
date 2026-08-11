@@ -3,7 +3,7 @@
  * Parameterized only by the motion tokens (dampingRatio/stiffness, mass = 1),
  * matching Compose's physics so `motionScheme` switching retunes everything.
  */
-import type { SpringToken } from '@m3x/tokens';
+import type { SpringToken } from '@tankmrap/m3x-tokens';
 
 export interface SpringState {
   value: number;

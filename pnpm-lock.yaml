@@ -17,13 +17,13 @@ importers:
 
   apps/gallery:
     dependencies:
-      '@m3x/primitives':
+      '@tankmrap/m3x-primitives':
         specifier: workspace:*
         version: link:../../packages/primitives
-      '@m3x/react':
+      '@tankmrap/m3x':
         specifier: workspace:*
         version: link:../../packages/react
-      '@m3x/tokens':
+      '@tankmrap/m3x-tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
       react:
@@ -51,13 +51,13 @@ importers:
 
   apps/playground:
     dependencies:
-      '@m3x/primitives':
+      '@tankmrap/m3x-primitives':
         specifier: workspace:*
         version: link:../../packages/primitives
-      '@m3x/react':
+      '@tankmrap/m3x':
         specifier: workspace:*
         version: link:../../packages/react
-      '@m3x/tokens':
+      '@tankmrap/m3x-tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
       react:
@@ -85,7 +85,7 @@ importers:
 
   packages/primitives:
     dependencies:
-      '@m3x/tokens':
+      '@tankmrap/m3x-tokens':
         specifier: workspace:*
         version: link:../tokens
     devDependencies:
@@ -116,10 +116,10 @@ importers:
 
   packages/react:
     dependencies:
-      '@m3x/primitives':
+      '@tankmrap/m3x-primitives':
         specifier: workspace:*
         version: link:../primitives
-      '@m3x/tokens':
+      '@tankmrap/m3x-tokens':
         specifier: workspace:*
         version: link:../tokens
     devDependencies:

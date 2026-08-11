@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon } from '@m3x/primitives';
+import { Icon } from '@tankmrap/m3x-primitives';
 import { ALERT_ICONS, AlertSeverity } from './Alert';
 
 export interface ToastOptions {
