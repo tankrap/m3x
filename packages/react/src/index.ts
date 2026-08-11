@@ -51,3 +51,10 @@ export { Sidebar, type SidebarProps, type SidebarItemSpec, type SidebarSectionSp
 export { NavBar, type NavBarProps, type NavBarLinkSpec } from './desktop/NavBar';
 export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbSpec } from './desktop/Breadcrumbs';
 export type { FieldSize } from './text-field/TextField';
+export { Gauge, SegmentedArcGauge, type GaugeProps, type SegmentedArcGaugeProps, type ArcSegment } from './charts/Gauge';
+export { PieChart, type PieChartProps, type PieSlice } from './charts/PieChart';
+export { ContributionChart, type ContributionChartProps, type ContributionEntry } from './charts/ContributionChart';
+export { BarChart, type BarChartProps, type BarDatum } from './charts/BarChart';
+export { LineChart, AreaChart, type LineChartProps, type AreaChartProps, type LineSeries } from './charts/LineChart';
+export { Table, TableHead, TableBody, TableRow, TableCell, type TableProps, type TableRowProps, type TableCellProps } from './table/Table';
+export { DataTable, type DataTableProps, type DataTableColumn } from './table/DataTable';

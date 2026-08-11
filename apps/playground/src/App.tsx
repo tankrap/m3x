@@ -58,6 +58,19 @@ import {
   Sidebar,
   NavBar,
   Breadcrumbs,
+  Gauge,
+  SegmentedArcGauge,
+  PieChart,
+  ContributionChart,
+  BarChart,
+  LineChart,
+  AreaChart,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  DataTable,
   type TimeValue,
   type ButtonSize,
 } from '@ibx34/m3x';
@@ -662,6 +675,128 @@ export function App() {
               <Text variant="bodyMedium" color="on-surface-variant">
                 A desktop shell composed from Sidebar, NavBar and Breadcrumbs.
               </Text>
+            </div>
+          </div>
+        </Section>
+
+        <Section title="Extras: charts">
+          <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <Gauge value={72} label="Air quality" aria-label="Air quality 72" />
+            <SegmentedArcGauge
+              aria-label="Storage"
+              total={128}
+              label="GB used"
+              legend
+              segments={[
+                { value: 41, label: 'Apps' },
+                { value: 22, label: 'Media' },
+                { value: 9, label: 'System' },
+              ]}
+            />
+            <PieChart
+              aria-label="Traffic sources"
+              label="sessions"
+              slices={[
+                { value: 4120, label: 'Direct' },
+                { value: 2870, label: 'Search' },
+                { value: 1560, label: 'Social' },
+                { value: 630, label: 'Email' },
+              ]}
+              children="9.2k"
+            />
+          </div>
+          <div style={{ display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'flex-start', marginTop: 24 }}>
+            <BarChart
+              aria-label="Weekly activity"
+              showValues
+              data={[
+                { label: 'Mon', value: 34 },
+                { label: 'Tue', value: 52 },
+                { label: 'Wed', value: 41 },
+                { label: 'Thu', value: 78 },
+                { label: 'Fri', value: 63 },
+                { label: 'Sat', value: 22 },
+                { label: 'Sun', value: 15 },
+              ]}
+            />
+            <LineChart
+              aria-label="Revenue"
+              legend
+              showPoints
+              labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']}
+              series={[
+                { label: 'This year', values: [12, 19, 14, 26, 30, 24, 38, 44] },
+                { label: 'Last year', values: [10, 12, 16, 14, 20, 22, 19, 26] },
+              ]}
+            />
+            <AreaChart
+              aria-label="Active users"
+              labels={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[{ label: 'Users', values: [420, 380, 510, 470, 690, 810, 640] }]}
+            />
+          </div>
+          <div style={{ marginTop: 24 }}>
+            <ContributionChart
+              aria-label="Commits"
+              weeks={30}
+              endDate={new Date(2026, 7, 10)}
+              entries={Array.from({ length: 150 }, (_, i) => {
+                const d = new Date(2026, 7, 10);
+                d.setDate(d.getDate() - Math.floor((i * 37) % 200));
+                return { date: d, value: (i * 13) % 9 };
+              })}
+            />
+          </div>
+        </Section>
+
+        <Section title="Extras: tables">
+          <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <div style={{ minWidth: 320 }}>
+              <Table striped density="compact" aria-label="Nutrition">
+                <TableHead>
+                  <TableRow>
+                    <TableCell header>Dessert</TableCell>
+                    <TableCell header numeric>Calories</TableCell>
+                    <TableCell header numeric>Fat (g)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {[
+                    ['Frozen yogurt', 159, 6],
+                    ['Ice cream sandwich', 237, 9],
+                    ['Eclair', 262, 16],
+                    ['Cupcake', 305, 3.7],
+                  ].map(([name, cal, fat]) => (
+                    <TableRow key={String(name)}>
+                      <TableCell>{name}</TableCell>
+                      <TableCell numeric>{cal}</TableCell>
+                      <TableCell numeric>{fat}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div style={{ minWidth: 420, flex: 1, maxWidth: 620 }}>
+              <DataTable
+                aria-label="Team"
+                selectable
+                pageSize={4}
+                defaultSort={{ key: 'commits', direction: 'desc' }}
+                rowKey={(r) => r.id}
+                columns={[
+                  { key: 'name', header: 'Member', sortable: true },
+                  { key: 'role', header: 'Role' },
+                  { key: 'commits', header: 'Commits', sortable: true, numeric: true },
+                ]}
+                rows={[
+                  { id: '1', name: 'Ali Connors', role: 'Design', commits: 214 },
+                  { id: '2', name: 'Sandra Adams', role: 'Engineering', commits: 431 },
+                  { id: '3', name: 'Peter Carlsson', role: 'Engineering', commits: 388 },
+                  { id: '4', name: 'Trevor Hansen', role: 'PM', commits: 96 },
+                  { id: '5', name: 'Britta Holt', role: 'Engineering', commits: 502 },
+                  { id: '6', name: 'Mary Johnson', role: 'Research', commits: 158 },
+                ]}
+              />
             </div>
           </div>
         </Section>
