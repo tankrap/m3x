@@ -18,7 +18,9 @@ export function capDegrees(thickness: number, r: number): number {
 
 /**
  * Arc path inset by the round-cap bleed on both ends, so adjacent capped arcs
- * show a true visual gap instead of overlapping.
+ * show a true visual gap instead of overlapping. Slices too small to survive
+ * the inset keep a minimum drawn arc (rendering as a rounded dot/stub) instead
+ * of degenerating into a sliver.
  */
 export function cappedArcPath(
   cx: number,
@@ -29,10 +31,13 @@ export function cappedArcPath(
   thickness: number,
 ): string {
   const cap = capDegrees(thickness, r);
-  const mid = (startDeg + endDeg) / 2;
-  const a = Math.min(startDeg + cap, mid - 0.25);
-  const b = Math.max(endDeg - cap, mid + 0.25);
-  return arcPath(cx, cy, r, a, b);
+  const MIN_DRAWN = Math.max(4, cap * 0.75);
+  const usable = endDeg - startDeg - 2 * cap;
+  if (usable < MIN_DRAWN) {
+    const mid = (startDeg + endDeg) / 2;
+    return arcPath(cx, cy, r, mid - MIN_DRAWN / 2, mid + MIN_DRAWN / 2);
+  }
+  return arcPath(cx, cy, r, startDeg + cap, endDeg - cap);
 }
 
 /** open arc path between two clock angles (for stroked arcs) */

@@ -160,6 +160,7 @@
 
 .m3x-pie__slice {
   fill: none;
+  stroke-linecap: round;
 }
 
 /* ---- chart header (BoardUI-style hover swap) ------------------------------ */
