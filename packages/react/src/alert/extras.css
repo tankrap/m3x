@@ -495,7 +495,7 @@
 
 .m3x-morph-dialog__step {
   box-sizing: border-box;
-  width: 100%;
+  flex-shrink: 0;
   padding: 24px;
   display: flex;
   flex-direction: column;

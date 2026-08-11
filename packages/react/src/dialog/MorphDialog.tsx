@@ -71,7 +71,17 @@ export function MorphDialog({
 
   const [size, setSize] = React.useState<{ w: number; h: number } | null>(null);
   const [leaving, setLeaving] = React.useState<MorphDialogStep | null>(null);
-  const prevStepId = React.useRef(step);
+  const [displayedStep, setDisplayedStep] = React.useState(step);
+
+  // Derive the outgoing overlay DURING render (the React "adjust state on
+  // prop change" pattern — StrictMode-safe, unlike a ref mutation), so the
+  // very first painted frame of a step change already shows the crossfade;
+  // an effect-based swap would flash the new content plainly for one frame.
+  if (displayedStep !== step) {
+    const prev = steps.find((s) => s.id === displayedStep);
+    setDisplayedStep(step);
+    if (prev && !reducedMotion) setLeaving(prev);
+  }
 
   React.useEffect(() => {
     const dialog = ref.current;
@@ -80,17 +90,12 @@ export function MorphDialog({
     else if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  // outgoing content overlays briefly while the container morphs
+  // clear the outgoing overlay once its exit animation has played
   React.useEffect(() => {
-    if (prevStepId.current === step) return;
-    const prev = steps.find((s) => s.id === prevStepId.current);
-    prevStepId.current = step;
-    if (!prev || reducedMotion) return;
-    setLeaving(prev);
+    if (!leaving) return;
     const t = window.setTimeout(() => setLeaving(null), SWAP_MS);
     return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
+  }, [leaving]);
 
   // measure the incoming step's natural size after paint — by then the
   // dialog's showModal() has run, so the hidden measurer has real layout.
@@ -105,6 +110,7 @@ export function MorphDialog({
 
   const renderStep = (s: MorphDialogStep, mode: 'live' | 'leaving' | 'measure') => (
     <div
+      key={mode === 'live' ? s.id : undefined}
       className={[
         'm3x-morph-dialog__step',
         mode === 'leaving' ? 'm3x-morph-dialog__step--leaving' : undefined,
@@ -112,6 +118,7 @@ export function MorphDialog({
       ]
         .filter(Boolean)
         .join(' ')}
+      style={{ width: s.width ?? width }}
     >
       {s.icon && (
         <Icon size={24} className="m3x-dialog__icon">
