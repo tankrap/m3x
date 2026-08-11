@@ -127,24 +127,60 @@ export function LineChart({
             ),
         )}
         {interactive && active != null && (() => {
-          // per-series value pills at the active index, staggered apart when
-          // points share a zone so close values stay distinguishable
+          // Per-series value pills at the active index. Placement is
+          // position-aware: each pill prefers the side (above/below its dot)
+          // with the most clearance from every curve in the pill's x-zone,
+          // stays inside the plot, and pills push apart so they never overlap.
+          const ax = x(active);
+          const flip = ax > width - 76;
+          const yTop = PAD_TOP + 10;
+          const yBottom = baseline - 10;
+          const clamp = (v: number) => Math.min(yBottom, Math.max(yTop, v));
+          // curve heights near the active x (all series, neighbor points too)
+          const occupied: number[] = [];
+          for (const s of series) {
+            for (const idx of [active - 1, active, active + 1]) {
+              const v = s.values[idx];
+              if (v != null) occupied.push(y(v));
+            }
+          }
+          const clearance = (cy: number, placed: number[]) => {
+            let d = Math.min(...occupied.map((o) => Math.abs(cy - o)), 99);
+            for (const p of placed) d = Math.min(d, Math.abs(cy - p));
+            return d;
+          };
+          const placedYs: number[] = [];
           const entries = series
             .map((s, si) => ({ si, v: s.values[active], color: s.color ?? seriesColor(si) }))
             .filter((e): e is { si: number; v: number; color: string } => e.v != null)
-            .map((e) => ({ ...e, dotY: y(e.v), labelY: y(e.v) - 14 }))
-            .sort((a, b) => a.dotY - b.dotY);
+            .sort((a, b) => y(a.v) - y(b.v))
+            .map((e) => {
+              const dotY = y(e.v);
+              const above = clamp(dotY - 18);
+              const below = clamp(dotY + 18);
+              // small bias toward "above" when clearances tie
+              const labelY =
+                clearance(above, placedYs) + 1.5 >= clearance(below, placedYs) ? above : below;
+              placedYs.push(labelY);
+              return { ...e, labelY };
+            })
+            .sort((a, b) => a.labelY - b.labelY);
+          // final anti-overlap pass (min 20px apart, kept inside the plot)
           for (let k = 1; k < entries.length; k++) {
             if (entries[k]!.labelY - entries[k - 1]!.labelY < 20) {
               entries[k]!.labelY = entries[k - 1]!.labelY + 20;
             }
           }
-          const ax = x(active);
-          const flip = ax > width - 64;
+          for (let k = entries.length - 1; k >= 0; k--) {
+            if (entries[k]!.labelY > yBottom) entries[k]!.labelY = yBottom;
+            if (k < entries.length - 1 && entries[k + 1]!.labelY - entries[k]!.labelY < 20) {
+              entries[k]!.labelY = entries[k + 1]!.labelY - 20;
+            }
+          }
           return entries.map((e) => {
             const text = fmt(e.v);
             const w = 14 + text.length * 7;
-            const rx2 = flip ? ax - 10 - w : ax + 10;
+            const rx2 = flip ? ax - 12 - w : ax + 12;
             return (
               <g key={`pill-${e.si}`} className="m3x-line-chart__value-pill">
                 <rect x={rx2} y={e.labelY - 9} width={w} height={18} rx={9} />

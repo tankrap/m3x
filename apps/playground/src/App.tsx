@@ -749,7 +749,6 @@ export function App() {
                 aria-label="Traffic sources"
                 label="sessions"
                 size={150}
-                thickness={24}
                 slices={[
                   { value: 4120, label: 'Direct' },
                   { value: 2870, label: 'Search' },

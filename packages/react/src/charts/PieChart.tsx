@@ -35,7 +35,7 @@ export interface PieChartProps {
 export function PieChart({
   slices,
   size = 180,
-  thickness = 28,
+  thickness = 14,
   gap = 3,
   children,
   label,
