@@ -10,7 +10,9 @@ test('gallery apps', async ({ page }) => {
   // fonts.ready can resolve before the icon-font stylesheet has even been
   // fetched — wait until the Material Symbols face is actually usable
   await page.waitForFunction(
-    () => document.fonts.check('24px "Material Symbols Outlined"'),
+    () =>
+      document.fonts.check('24px "Material Symbols Outlined"') &&
+      document.fonts.check('16px "Roboto Flex"'),
     undefined,
     { timeout: 30_000 },
   );
