@@ -1,6 +1,6 @@
 {
   "name": "@ibx34/m3x-tokens",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Material 3 + Expressive design tokens: dynamic color, typography, shape, elevation, state layers, motion physics. Not affiliated with or endorsed by Google.",
   "license": "Apache-2.0",
   "repository": {
