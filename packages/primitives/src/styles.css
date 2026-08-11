@@ -105,3 +105,16 @@
 .material-symbols-sharp {
   font-family: 'Material Symbols Sharp';
 }
+
+/* ---- modal scroll lock ---------------------------------------------------
+   showModal() makes the background inert for clicks/focus, but the wheel can
+   still scroll the page behind the scrim — lock it while any modal dialog
+   (Dialog, FormDialog, MorphDialog, BottomSheet, SideSheet, drawer, search
+   view) is open. Browsers without :has()/:modal simply ignore this. */
+body:has(dialog:modal) {
+  overflow: hidden;
+}
+
+dialog:modal {
+  overscroll-behavior: contain;
+}
